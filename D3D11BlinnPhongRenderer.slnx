@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="D3D11BlinnPhongRenderer/D3D11BlinnPhongRenderer.vcxproj" Id="e012c637-da86-47e2-9c92-56a90a9a93d2" />
+</Solution>

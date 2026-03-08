@@ -1,0 +1,58 @@
+#include "pch.h"
+#include "MeshGenerator.h"
+
+void MeshGenerator::GenerateCube(Mesh &mesh) {
+    mesh.vertices.clear();
+    mesh.indices.clear();
+
+    mesh.vertices.resize(24);
+
+    mesh.vertices[0].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
+    mesh.vertices[1].pos = glm::vec3(0.5f, 0.5f, -0.5f);
+    mesh.vertices[2].pos = glm::vec3(0.5f, -0.5f, -0.5f);
+    mesh.vertices[3].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
+
+    mesh.vertices[4].pos = glm::vec3(0.5f, 0.5f, 0.5f);
+    mesh.vertices[5].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
+    mesh.vertices[6].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
+    mesh.vertices[7].pos = glm::vec3(0.5f, -0.5f, 0.5f);
+
+    mesh.vertices[8].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
+    mesh.vertices[9].pos = glm::vec3(0.5f, 0.5f, 0.5f);
+    mesh.vertices[10].pos = glm::vec3(0.5f, 0.5f, -0.5f);
+    mesh.vertices[11].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
+
+    mesh.vertices[12].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
+    mesh.vertices[13].pos = glm::vec3(0.5f, -0.5f, -0.5f);
+    mesh.vertices[14].pos = glm::vec3(0.5f, -0.5f, 0.5f);
+    mesh.vertices[15].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
+
+    mesh.vertices[16].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
+    mesh.vertices[17].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
+    mesh.vertices[18].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
+    mesh.vertices[19].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
+
+    mesh.vertices[20].pos = glm::vec3(0.5f, 0.5f, -0.5f);
+    mesh.vertices[21].pos = glm::vec3(0.5f, 0.5f, 0.5f);
+    mesh.vertices[22].pos = glm::vec3(0.5f, -0.5f, 0.5f);
+    mesh.vertices[23].pos = glm::vec3(0.5f, -0.5f, -0.5f);
+
+    for (int i = 0; i < 6; ++i) {
+        int offset = i * 4;
+        mesh.vertices[offset + 0].uv = glm::vec2(0.0f, 0.0f);
+        mesh.vertices[offset + 1].uv = glm::vec2(1.0f, 0.0f);
+        mesh.vertices[offset + 2].uv = glm::vec2(1.0f, 1.0f);
+        mesh.vertices[offset + 3].uv = glm::vec2(0.0f, 1.0f);
+    }
+
+    for (int i = 0; i < 6; ++i) {
+        int offset = i * 4;
+        mesh.indices.push_back(offset + 0);
+        mesh.indices.push_back(offset + 1);
+        mesh.indices.push_back(offset + 2);
+
+        mesh.indices.push_back(offset + 0);
+        mesh.indices.push_back(offset + 2);
+        mesh.indices.push_back(offset + 3);
+    }
+}
