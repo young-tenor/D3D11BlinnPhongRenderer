@@ -26,6 +26,9 @@ private:
 	ID3D11Buffer *indexBuffer = nullptr;
 	ID3D11Buffer *constantBuffer = nullptr;
 
+	ID3D11SamplerState *samplerState = nullptr;
+	ID3D11ShaderResourceView *srv = nullptr;
+
 	Camera *camera = nullptr;
 	Mesh *cube = nullptr;
 };

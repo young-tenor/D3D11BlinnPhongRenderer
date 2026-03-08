@@ -3,6 +3,7 @@
 #include "Camera.h"
 #include "Mesh.h"
 #include "MeshGenerator.h"
+#include "TextureLoader.h"
 
 bool BlinnPhong::Init(HWND hWnd) {
 	if (!App::Init(hWnd)) {
@@ -86,6 +87,25 @@ bool BlinnPhong::Init(HWND hWnd) {
 	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
 	psBlob->Release();
 
+	// sampler
+	D3D11_SAMPLER_DESC samplerDesc = { 0 };
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	hr = device->CreateSamplerState(&samplerDesc, &samplerState);
+	if (FAILED(hr)) {
+		std::cout << "CreateSamplerState() failed." << std::endl;
+		return false;
+	}
+
+	// texture
+	TextureLoader::CreateTexture(device, "./f-texture.png", &srv);
+
 	return true;
 }
 
@@ -125,6 +145,8 @@ void BlinnPhong::Render() {
 	context->VSSetConstantBuffers(0, 1, &constantBuffer);
 	context->VSSetShader(vs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
+	context->PSSetShaderResources(0, 1, &srv);
+	context->PSSetSamplers(0, 1, &samplerState);
 
 	context->DrawIndexed(cube->indices.size(), 0, 0);
 
