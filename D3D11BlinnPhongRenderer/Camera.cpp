@@ -17,7 +17,7 @@ void Camera::Update() {
         float dx = (float)(curPos.x - prevPos.x);
         float dy = (float)(curPos.y - prevPos.y);
 
-        yaw += -dx * glm::pi<float>() / width;
+        yaw += dx * glm::pi<float>() / width;
         pitch += dy * glm::pi<float>() / height;
     }
 
@@ -26,9 +26,13 @@ void Camera::Update() {
     const float limit = glm::radians(89.0f);
     pitch = std::clamp(pitch, -limit, limit);
 
-    pos.x = radius * cos(pitch) * sin(yaw);
-    pos.y = radius * sin(pitch);
-    pos.z = -radius * cos(pitch) * cos(yaw);
+    glm::vec4 initialPos = glm::vec4(0.0f, 0.0f, -radius, 1.0f);
+
+    glm::mat4 rotation = glm::mat4(1.0f);
+    rotation = glm::rotate(rotation, yaw, glm::vec3(0.0f, 1.0f, 0.0f));
+    rotation = glm::rotate(rotation, pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+
+    glm::vec3 pos = glm::vec3(rotation * initialPos);
 
     view = glm::lookAtLH(pos, at, up);
 }
