@@ -37,7 +37,7 @@ void MeshGenerator::GenerateCube(Mesh &mesh) {
     mesh.vertices[22].pos = glm::vec3(0.5f, -0.5f, 0.5f);
     mesh.vertices[23].pos = glm::vec3(0.5f, -0.5f, -0.5f);
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 6; i++) {
         int offset = i * 4;
         mesh.vertices[offset + 0].uv = glm::vec2(0.0f, 0.0f);
         mesh.vertices[offset + 1].uv = glm::vec2(1.0f, 0.0f);
@@ -45,7 +45,7 @@ void MeshGenerator::GenerateCube(Mesh &mesh) {
         mesh.vertices[offset + 3].uv = glm::vec2(0.0f, 1.0f);
     }
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 6; i++) {
         int offset = i * 4;
         mesh.indices.push_back(offset + 0);
         mesh.indices.push_back(offset + 1);
@@ -54,5 +54,53 @@ void MeshGenerator::GenerateCube(Mesh &mesh) {
         mesh.indices.push_back(offset + 0);
         mesh.indices.push_back(offset + 2);
         mesh.indices.push_back(offset + 3);
+    }
+}
+
+// https://www.songho.ca/opengl/gl_sphere.html
+void MeshGenerator::GenerateSphere(Mesh &mesh, const float radius, const int sectorCount, const int stackCount) {
+    mesh.vertices.clear();
+    mesh.indices.clear();
+
+    const float sectorStep = 2 * glm::pi<float>() / sectorCount;
+    const float stackStep = glm::pi<float>() / stackCount;
+
+    for (int i = 0; i <= stackCount; i++) {
+        float stackAngle = glm::pi<float>() / 2 - i * stackStep;
+        float xz = radius * glm::cos(stackAngle);
+        float y = radius * glm::sin(stackAngle);
+
+        for (int j = 0; j <= sectorCount; j++) {
+            float sectorAngle = j * sectorStep;
+
+            Vertex vertex;
+            vertex.pos.x = xz * glm::cos(sectorAngle);
+            vertex.pos.y = y;
+            vertex.pos.z = xz * glm::sin(sectorAngle);
+
+            vertex.uv.x = (float)j / sectorCount;
+            vertex.uv.y = (float)i / stackCount;
+
+            mesh.vertices.push_back(vertex);
+        }
+    }
+
+    for (int i = 0; i < stackCount; i++) {
+        int k1 = i * (sectorCount + 1);
+        int k2 = k1 + sectorCount + 1;
+
+        for (int j = 0; j < sectorCount; j++, k1++, k2++) {
+            if (i != 0) {
+                mesh.indices.push_back(k1);
+                mesh.indices.push_back(k1 + 1);
+                mesh.indices.push_back(k2);
+            }
+
+            if (i != (stackCount - 1)) {
+                mesh.indices.push_back(k2);
+                mesh.indices.push_back(k1 + 1);
+                mesh.indices.push_back(k2 + 1);
+            }
+        }
     }
 }

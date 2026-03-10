@@ -14,17 +14,18 @@ bool BlinnPhong::Init(HWND hWnd) {
 	camera->width = width;
 	camera->height = height;
 
-	cube = new Mesh();
-	MeshGenerator::GenerateCube(*cube);
+	mesh = new Mesh();
+	//MeshGenerator::GenerateCube(*mesh);
+	MeshGenerator::GenerateSphere(*mesh);
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = cube->vertices.size() * sizeof(Vertex);
+	vertexBufferDesc.ByteWidth = mesh->vertices.size() * sizeof(Vertex);
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 	D3D11_SUBRESOURCE_DATA verticesData = { 0 };
-	verticesData.pSysMem = cube->vertices.data();
+	verticesData.pSysMem = mesh->vertices.data();
 	HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &verticesData, &vertexBuffer);
 	if (FAILED(hr)) {
 		std::cout << "CreateBuffer() failed: vertex buffer" << std::endl;
@@ -34,11 +35,11 @@ bool BlinnPhong::Init(HWND hWnd) {
 	// index buffer
 	D3D11_BUFFER_DESC indexBufferDesc = { 0 };
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = cube->indices.size() * sizeof(int);
+	indexBufferDesc.ByteWidth = mesh->indices.size() * sizeof(int);
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
 	D3D11_SUBRESOURCE_DATA indicesData = { 0 };
-	indicesData.pSysMem = cube->indices.data();
+	indicesData.pSysMem = mesh->indices.data();
 	hr = device->CreateBuffer(&indexBufferDesc, &indicesData, &indexBuffer);
 	if (FAILED(hr)) {
 		std::cout << "CreateBuffer() failed: index buffer" << std::endl;
@@ -148,7 +149,7 @@ void BlinnPhong::Render() {
 	context->PSSetShaderResources(0, 1, &srv);
 	context->PSSetSamplers(0, 1, &samplerState);
 
-	context->DrawIndexed(cube->indices.size(), 0, 0);
+	context->DrawIndexed(mesh->indices.size(), 0, 0);
 
 	swapChain->Present(1, 0);
 }

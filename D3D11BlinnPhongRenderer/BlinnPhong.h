@@ -30,6 +30,6 @@ private:
 	ID3D11ShaderResourceView *srv = nullptr;
 
 	Camera *camera = nullptr;
-	Mesh *cube = nullptr;
+	Mesh *mesh = nullptr;
 };
 
