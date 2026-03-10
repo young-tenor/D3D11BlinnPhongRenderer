@@ -11,9 +11,9 @@ void Camera::Update() {
 
     static POINT prevPos = curPos;
 
-    bool rightButtonDown = GetAsyncKeyState(VK_RBUTTON) & 0x8000;
+    bool lbuttonDown = GetAsyncKeyState(VK_LBUTTON) & 0x8000;
 
-    if (rightButtonDown) {
+    if (lbuttonDown) {
         float dx = (float)(curPos.x - prevPos.x);
         float dy = (float)(curPos.y - prevPos.y);
 
