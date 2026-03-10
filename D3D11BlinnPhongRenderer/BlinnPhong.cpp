@@ -105,7 +105,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	}
 
 	// texture
-	TextureLoader::CreateTexture(device, "./f-texture.png", &srv);
+	TextureLoader::CreateTexture(device, "./brick-texture.png", &srv);
 
 	return true;
 }
