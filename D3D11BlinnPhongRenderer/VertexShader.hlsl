@@ -7,13 +7,13 @@ cbuffer Constants : register(b0) {
 struct VSInput {
     float3 pos : POSITION;
     float3 normal : NORMAL;
-    float2 uv : TEXCOORD;
+    float2 texcoord : TEXCOORD;
 };
 
 struct PSInput {
     float4 pos : SV_POSITION;
     float3 normal : NORMAL;
-    float2 uv : TEXCOORD;
+    float2 texcoord : TEXCOORD;
 };
 
 PSInput main(VSInput input) {
@@ -26,7 +26,7 @@ PSInput main(VSInput input) {
     
     output.pos = pos;
     output.normal = input.normal;
-    output.uv = input.uv;
+    output.texcoord = input.texcoord;
     
     return output;
 }
