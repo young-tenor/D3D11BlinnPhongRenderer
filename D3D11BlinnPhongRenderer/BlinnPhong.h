@@ -3,10 +3,9 @@
 #include "Camera.h"
 #include "Mesh.h"
 
-struct MVP {
-	glm::mat4 model;
-	glm::mat4 view;
-	glm::mat4 projection;
+struct PerObject {
+	glm::mat4 mvp;
+	glm::mat4 modelInvTr;
 };
 
 class BlinnPhong : public App {

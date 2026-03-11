@@ -1,7 +1,6 @@
-cbuffer Constants : register(b0) {
-    matrix model;
-    matrix view;
-    matrix proj;
+cbuffer PerObject : register(b0) {
+    matrix mvp;
+    matrix modelInvTr;
 }
 
 struct VSInput {
@@ -19,13 +18,8 @@ struct PSInput {
 PSInput main(VSInput input) {
     PSInput output;
     
-    float4 pos = float4(input.pos, 1.0f);
-    pos = mul(pos, model);
-    pos = mul(pos, view);
-    pos = mul(pos, proj);
-    
-    output.pos = pos;
-    output.normal = input.normal;
+    output.pos = mul(float4(input.pos, 1.0f), mvp);
+    output.normal = mul(float4(input.normal, 0.0f), modelInvTr);
     output.texcoord = input.texcoord;
     
     return output;

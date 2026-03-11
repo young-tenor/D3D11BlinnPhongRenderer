@@ -49,7 +49,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	// constant buffer
 	D3D11_BUFFER_DESC constBufferDesc = { 0 };
 	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	constBufferDesc.ByteWidth = sizeof(MVP);
+	constBufferDesc.ByteWidth = sizeof(PerObject);
 	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
@@ -114,18 +114,17 @@ bool BlinnPhong::Init(HWND hWnd) {
 void BlinnPhong::Update() {
 	camera->Update();
 
-	MVP mvp;
-	mvp.model = glm::mat4(1.0f);
-	mvp.view = camera->view;
-	mvp.projection = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+	const auto model = glm::mat4(1.0f);
+	const auto view = camera->view;
+	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
-	mvp.model = glm::transpose(mvp.model);
-	mvp.view = glm::transpose(mvp.view);
-	mvp.projection = glm::transpose(mvp.projection);
+	PerObject perObject;
+	perObject.mvp = glm::transpose(proj * view * model);
+	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, &mvp, sizeof(MVP));
+	memcpy(resource.pData, &perObject, sizeof(PerObject));
 	context->Unmap(constantBuffer, 0);
 }
 
