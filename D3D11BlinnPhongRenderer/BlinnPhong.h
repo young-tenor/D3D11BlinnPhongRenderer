@@ -1,16 +1,31 @@
 #pragma once
 #include "App.h"
 #include "Camera.h"
+#include "Light.h"
 #include "Mesh.h"
 
+struct Material {
+	glm::vec3 ambient;
+	float shininess;
+	glm::vec3 diffuse;
+	float padding1;
+	glm::vec3 specular;
+	float padding2;
+};
+
 struct PerObject {
-	glm::mat4 mvp;
+	glm::mat4 model;
+	glm::mat4 viewProj;
 	glm::mat4 modelInvTr;
+
+	Material material;
 };
 
 struct PerFrame {
+	glm::vec3 lightPos;
+	float lightStrength;
+	glm::vec3 eyePos;
 	int useTexture;
-	float padding[3];
 };
 
 class BlinnPhong : public App {
@@ -37,6 +52,8 @@ private:
 	bool useTexture = false;
 
 	Camera *camera = nullptr;
+	Light *light = nullptr;
 	Mesh *mesh = nullptr;
+	Material *material = nullptr;
 };
 

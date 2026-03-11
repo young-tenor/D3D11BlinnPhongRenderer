@@ -1,6 +1,18 @@
+struct Material {
+    float3 ambient;
+    float shininess;
+    float3 diffuse;
+    float padding1;
+    float3 specular;
+    float padding2;
+};
+
 cbuffer PerObject : register(b0) {
-    matrix mvp;
+    matrix model;
+    matrix viewProj;
     matrix modelInvTr;
+    
+    Material material;
 }
 
 struct VSInput {
@@ -11,6 +23,7 @@ struct VSInput {
 
 struct PSInput {
     float4 pos : SV_POSITION;
+    float3 posWorld : POSITION;
     float3 normal : NORMAL;
     float2 texcoord : TEXCOORD;
 };
@@ -18,7 +31,8 @@ struct PSInput {
 PSInput main(VSInput input) {
     PSInput output;
     
-    output.pos = mul(float4(input.pos, 1.0f), mvp);
+    output.posWorld = mul(float4(input.pos, 1.0f), model);
+    output.pos = mul(float4(output.posWorld, 1.0f), viewProj);
     output.normal = mul(float4(input.normal, 0.0f), modelInvTr);
     output.texcoord = input.texcoord;
     

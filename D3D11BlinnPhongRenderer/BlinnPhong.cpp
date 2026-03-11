@@ -14,9 +14,17 @@ bool BlinnPhong::Init(HWND hWnd) {
 	camera->width = width;
 	camera->height = height;
 
+	light = new Light();
+
 	mesh = new Mesh();
 	//MeshGenerator::GenerateCube(*mesh);
 	MeshGenerator::GenerateSphere(*mesh);
+
+	material = new Material();
+	material->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+	material->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
+	material->specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	material->shininess = 32.0f;
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
@@ -123,7 +131,9 @@ bool BlinnPhong::Init(HWND hWnd) {
 }
 
 void BlinnPhong::Update() {
-	camera->Update();
+	if (!ImGui::GetIO().WantCaptureMouse) {
+		camera->Update();
+	}
 
 	// per object
 	const auto model = glm::mat4(1.0f);
@@ -131,8 +141,15 @@ void BlinnPhong::Update() {
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 
 	PerObject perObject;
-	perObject.mvp = glm::transpose(proj * view * model);
+
+	perObject.model = glm::transpose(model);
+	perObject.viewProj = glm::transpose(proj * view);
 	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
+
+	perObject.material.ambient = material->ambient;
+	perObject.material.diffuse = material->diffuse;
+	perObject.material.specular = material->specular;
+	perObject.material.shininess = material->shininess;
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(perObjectBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
@@ -141,6 +158,9 @@ void BlinnPhong::Update() {
 
 	// per frame
 	PerFrame perFrame;
+	perFrame.lightPos = light->pos;
+	perFrame.lightStrength = light->strength;
+	perFrame.eyePos = camera->pos;
 	perFrame.useTexture = useTexture;
 
 	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
@@ -154,13 +174,34 @@ void BlinnPhong::Update() {
 
 	ImGui::Begin("Blinn-Phong");
 
+	ImGui::Text("material");
+	if (ImGui::SliderFloat("ambient", &material->ambient.x, 0.0f, 1.0f)) {
+		material->ambient.y = material->ambient.x;
+		material->ambient.z = material->ambient.x;
+	}
+	if (ImGui::SliderFloat("diffuse", &material->diffuse.x, 0.0f, 1.0f)) {
+		material->diffuse.y = material->diffuse.x;
+		material->diffuse.z = material->diffuse.x;
+	}
+	if (ImGui::SliderFloat("specular", &material->specular.x, 0.0f, 1.0f)) {
+		material->specular.y = material->specular.x;
+		material->specular.z = material->specular.x;
+	}
+	ImGui::SliderFloat("shininess", &material->shininess, 1.0f, 256.0f);
 	ImGui::Checkbox("use texture", &useTexture);
+
+	ImGui::Separator();
+
+	ImGui::Text("light");
+	ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();
 }
 
 void BlinnPhong::Render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
+	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->ClearRenderTargetView(rtv, clear_color);
 	context->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
@@ -174,8 +215,9 @@ void BlinnPhong::Render() {
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
 	context->VSSetConstantBuffers(0, 1, &perObjectBuffer);
-	context->PSSetConstantBuffers(0, 1, &perFrameBuffer);
+	context->PSSetConstantBuffers(0, 2, constant_buffers);
 	context->VSSetShader(vs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
 	context->PSSetShaderResources(0, 1, &srv);

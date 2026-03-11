@@ -32,7 +32,7 @@ void Camera::Update() {
     rotation = glm::rotate(rotation, yaw, glm::vec3(0.0f, 1.0f, 0.0f));
     rotation = glm::rotate(rotation, pitch, glm::vec3(1.0f, 0.0f, 0.0f));
 
-    glm::vec3 pos = glm::vec3(rotation * initialPos);
+    pos = glm::vec3(rotation * initialPos);
 
     view = glm::lookAtLH(pos, at, up);
 }
