@@ -39,10 +39,10 @@ void MeshGenerator::GenerateCube(Mesh &mesh) {
 
     for (int i = 0; i < 6; i++) {
         int offset = i * 4;
-        mesh.vertices[offset + 0].uv = glm::vec2(0.0f, 0.0f);
-        mesh.vertices[offset + 1].uv = glm::vec2(1.0f, 0.0f);
-        mesh.vertices[offset + 2].uv = glm::vec2(1.0f, 1.0f);
-        mesh.vertices[offset + 3].uv = glm::vec2(0.0f, 1.0f);
+        mesh.vertices[offset + 0].texcoord = glm::vec2(0.0f, 0.0f);
+        mesh.vertices[offset + 1].texcoord = glm::vec2(1.0f, 0.0f);
+        mesh.vertices[offset + 2].texcoord = glm::vec2(1.0f, 1.0f);
+        mesh.vertices[offset + 3].texcoord = glm::vec2(0.0f, 1.0f);
     }
 
     for (int i = 0; i < 6; i++) {
@@ -78,8 +78,8 @@ void MeshGenerator::GenerateSphere(Mesh &mesh, const float radius, const int sec
             vertex.pos.y = y;
             vertex.pos.z = xz * glm::sin(sectorAngle);
 
-            vertex.uv.x = (float)j / sectorCount;
-            vertex.uv.y = (float)i / stackCount;
+            vertex.texcoord.x = (float)j / sectorCount;
+            vertex.texcoord.y = (float)i / stackCount;
 
             mesh.vertices.push_back(vertex);
         }
