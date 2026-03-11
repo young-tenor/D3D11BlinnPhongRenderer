@@ -111,5 +111,16 @@ bool App::Init(HWND hWnd) {
 	device->CreateDepthStencilView(depthBuffer, nullptr, &dsv);
 	depthBuffer->Release();
 
+	// GUI
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO &io = ImGui::GetIO();
+	(void)io;
+
+	ImGui::StyleColorsLight();
+
+	ImGui_ImplWin32_Init(hWnd);
+	ImGui_ImplDX11_Init(device, context);
+
 	return true;
 }

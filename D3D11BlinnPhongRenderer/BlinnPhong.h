@@ -8,6 +8,11 @@ struct PerObject {
 	glm::mat4 modelInvTr;
 };
 
+struct PerFrame {
+	int useTexture;
+	float padding[3];
+};
+
 class BlinnPhong : public App {
 public:
 	~BlinnPhong() override = default;
@@ -23,10 +28,13 @@ private:
 
 	ID3D11Buffer *vertexBuffer = nullptr;
 	ID3D11Buffer *indexBuffer = nullptr;
-	ID3D11Buffer *constantBuffer = nullptr;
+	ID3D11Buffer *perObjectBuffer = nullptr;
+	ID3D11Buffer *perFrameBuffer = nullptr;
 
 	ID3D11SamplerState *samplerState = nullptr;
 	ID3D11ShaderResourceView *srv = nullptr;
+
+	bool useTexture = false;
 
 	Camera *camera = nullptr;
 	Mesh *mesh = nullptr;

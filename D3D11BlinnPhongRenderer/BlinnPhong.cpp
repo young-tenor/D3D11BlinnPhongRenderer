@@ -15,8 +15,8 @@ bool BlinnPhong::Init(HWND hWnd) {
 	camera->height = height;
 
 	mesh = new Mesh();
-	MeshGenerator::GenerateCube(*mesh);
-	//MeshGenerator::GenerateSphere(*mesh);
+	//MeshGenerator::GenerateCube(*mesh);
+	MeshGenerator::GenerateSphere(*mesh);
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
@@ -53,9 +53,20 @@ bool BlinnPhong::Init(HWND hWnd) {
 	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	hr = device->CreateBuffer(&constBufferDesc, nullptr, &constantBuffer);
+	hr = device->CreateBuffer(&constBufferDesc, nullptr, &perObjectBuffer);
 	if (FAILED(hr)) {
-		std::cout << "CreateBuffer() failed: constant buffer" << std::endl;
+		std::cout << "CreateBuffer() failed: constant buffer per object" << std::endl;
+		return false;
+	}
+
+	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	constBufferDesc.ByteWidth = sizeof(PerFrame);
+	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+    hr = device->CreateBuffer(&constBufferDesc, nullptr, &perFrameBuffer);
+	if (FAILED(hr)) {
+		std::cout << "CreateBuffer() failed: constant buffer per frame" << std::endl;
 		return false;
 	}
 
@@ -114,6 +125,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 void BlinnPhong::Update() {
 	camera->Update();
 
+	// per object
 	const auto model = glm::mat4(1.0f);
 	const auto view = camera->view;
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
@@ -123,9 +135,28 @@ void BlinnPhong::Update() {
 	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
 
 	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(constantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	context->Map(perObjectBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	memcpy(resource.pData, &perObject, sizeof(PerObject));
-	context->Unmap(constantBuffer, 0);
+	context->Unmap(perObjectBuffer, 0);
+
+	// per frame
+	PerFrame perFrame;
+	perFrame.useTexture = useTexture;
+
+	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
+	context->Unmap(perFrameBuffer, 0);
+
+	// GUI
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("Blinn-Phong");
+
+	ImGui::Checkbox("use texture", &useTexture);
+
+	ImGui::End();
 }
 
 void BlinnPhong::Render() {
@@ -143,13 +174,17 @@ void BlinnPhong::Render() {
 	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	context->VSSetConstantBuffers(0, 1, &constantBuffer);
+	context->VSSetConstantBuffers(0, 1, &perObjectBuffer);
+	context->PSSetConstantBuffers(0, 1, &perFrameBuffer);
 	context->VSSetShader(vs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
 	context->PSSetShaderResources(0, 1, &srv);
 	context->PSSetSamplers(0, 1, &samplerState);
 
 	context->DrawIndexed(mesh->indices.size(), 0, 0);
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
 	swapChain->Present(1, 0);
 }
