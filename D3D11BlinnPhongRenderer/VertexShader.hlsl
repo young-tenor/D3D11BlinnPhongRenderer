@@ -6,11 +6,13 @@ cbuffer Constants : register(b0) {
 
 struct VSInput {
     float3 pos : POSITION;
+    float3 normal : NORMAL;
     float2 uv : TEXCOORD;
 };
 
 struct PSInput {
     float4 pos : SV_POSITION;
+    float3 normal : NORMAL;
     float2 uv : TEXCOORD;
 };
 
@@ -23,6 +25,7 @@ PSInput main(VSInput input) {
     pos = mul(pos, proj);
     
     output.pos = pos;
+    output.normal = input.normal;
     output.uv = input.uv;
     
     return output;

@@ -15,8 +15,8 @@ bool BlinnPhong::Init(HWND hWnd) {
 	camera->height = height;
 
 	mesh = new Mesh();
-	//MeshGenerator::GenerateCube(*mesh);
-	MeshGenerator::GenerateSphere(*mesh);
+	MeshGenerator::GenerateCube(*mesh);
+	//MeshGenerator::GenerateSphere(*mesh);
 
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
@@ -70,9 +70,10 @@ bool BlinnPhong::Init(HWND hWnd) {
 	// input layout
 	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = {
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 3 + 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
-	device->CreateInputLayout(inputElementDesc, 2, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
+	device->CreateInputLayout(inputElementDesc, 3, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
 
 	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
 	vsBlob->Release();
