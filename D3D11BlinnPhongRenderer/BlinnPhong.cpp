@@ -158,8 +158,7 @@ void BlinnPhong::Update() {
 
 	// per frame
 	PerFrame perFrame;
-	perFrame.lightPos = light->pos;
-	perFrame.lightStrength = light->strength;
+	perFrame.light = *light;
 	perFrame.eyePos = camera->pos;
 	perFrame.useTexture = useTexture;
 
@@ -175,6 +174,7 @@ void BlinnPhong::Update() {
 	ImGui::Begin("Blinn-Phong");
 
 	ImGui::Text("material");
+
 	if (ImGui::SliderFloat("ambient", &material->ambient.x, 0.0f, 1.0f)) {
 		material->ambient.y = material->ambient.x;
 		material->ambient.z = material->ambient.x;
@@ -193,7 +193,30 @@ void BlinnPhong::Update() {
 	ImGui::Separator();
 
 	ImGui::Text("light");
-	ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+	if (ImGui::RadioButton("directional", light->type == LightType::Directional)) {
+		light->type = LightType::Directional;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("point", light->type == LightType::Point)) {
+		light->type = LightType::Point;
+	}
+	ImGui::SameLine();
+	if (ImGui::RadioButton("spot", light->type == LightType::Spot)) {
+		light->type = LightType::Spot;
+	}
+	if (light->type == LightType::Directional) {
+		ImGui::SliderFloat3("direction", &light->dir.x, -1.0f, 1.0f);
+	} else if (light->type == LightType::Point) {
+		ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+		ImGui::SliderFloat("fall off start", &light->fallOffStart, 0.0f, 10.0f);
+		ImGui::SliderFloat("fall off end", &light->fallOffEnd, 0.0f, 50.0f);
+	} else if (light->type == LightType::Spot) {
+		ImGui::DragFloat3("position", &light->pos.x, 0.1f);
+		ImGui::SliderFloat3("direction", &light->dir.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("fall off start", &light->fallOffStart, 0.0f, 10.0f);
+		ImGui::SliderFloat("fall off end", &light->fallOffEnd, 0.0f, 50.0f);
+		ImGui::SliderFloat("spot power", &light->spotPower, 1.0f, 128.0f);
+	}
 	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();

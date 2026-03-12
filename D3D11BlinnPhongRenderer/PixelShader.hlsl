@@ -1,3 +1,7 @@
+#define DIRECTIONAL 0
+#define POINT 1
+#define SPOT 2
+
 struct Material {
     float3 ambient;
     float shininess;
@@ -5,6 +9,17 @@ struct Material {
     float padding1;
     float3 specular;
     float padding2;
+};
+
+struct Light {
+    float3 pos;
+    float strength;
+    float3 dir;
+    float fallOffStart;
+    float fallOffEnd;
+    float spotPower;
+    int type;
+    float padding;
 };
 
 cbuffer PerObject : register(b0) {
@@ -16,8 +31,7 @@ cbuffer PerObject : register(b0) {
 }
 
 cbuffer PerFrame : register(b1) {
-    float3 lightPos;
-    float lightStrength;
+    Light light;
     float3 eyePos;
     int useTexture;
 }
@@ -33,20 +47,40 @@ Texture2D g_texture : register(t0);
 SamplerState g_sampler : register(s0);
 
 // https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
-float4 main(PSInput input) : SV_TARGET {
-    float3 N = normalize(input.normal);
-    float3 L = normalize(lightPos - input.posWorld);
-    float3 V = normalize(eyePos - input.posWorld);
-    float3 H = normalize(L + V);
+float3 BlinnPhong(float3 normal, float3 lightVec, float3 lightStrength, float3 eyeVec) {
+    float3 halfway = normalize(lightVec + eyeVec);
+    float3 specular = material.specular * pow(max(dot(normal, halfway), 0.0f), material.shininess);
     
-    float3 diffuse;
-    if (useTexture) {
-        diffuse = g_texture.Sample(g_sampler, input.texcoord).rgb;
+    return material.ambient + (material.diffuse + specular) * lightStrength;
+}
+
+float3 DirectionalLight(float3 normal, float3 eyeVec) {
+    float3 lightVec = -light.dir;
+    float3 lightStrength = light.strength * max(dot(lightVec, normal), 0.0f);
+    return BlinnPhong(normal, lightVec, lightStrength, eyeVec);
+}
+
+float3 PointLight(float3 normal, float3 eyeVec) {
+    return float3(0.0f, 0.0f, 0.0f);
+}
+
+float3 SpotLight(float3 normal, float3 eyeVec) {
+    return float3(0.0f, 0.0f, 0.0f);
+}
+
+float4 main(PSInput input) : SV_TARGET {
+    float3 eyeVec = normalize(eyePos - input.posWorld);
+    
+    float3 color = float3(0.0f, 0.0f, 0.0f);
+    if (light.type == DIRECTIONAL) {
+        color += DirectionalLight(input.normal, eyeVec);
+    } else if (light.type == POINT) {
+        color += PointLight(input.normal, eyeVec);
+    } else if (light.type == SPOT) {
+        color += SpotLight(input.normal, eyeVec);
     } else {
-        diffuse = material.diffuse;
+        color += float3(1.0f, 0.0f, 0.0f);
     }
     
-    float3 specular = material.specular * pow(max(dot(N, H), 0.0f), material.shininess);
-    
-    return float4(material.ambient + (diffuse + specular) * lightStrength * max(dot(L, N), 0.0f), 1.0f);
+    return float4(color, 1.0f);
 }

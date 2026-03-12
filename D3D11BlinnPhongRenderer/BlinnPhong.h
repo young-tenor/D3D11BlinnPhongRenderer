@@ -22,8 +22,7 @@ struct PerObject {
 };
 
 struct PerFrame {
-	glm::vec3 lightPos;
-	float lightStrength;
+	Light light;
 	glm::vec3 eyePos;
 	int useTexture;
 };
