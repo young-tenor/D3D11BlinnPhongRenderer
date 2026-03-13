@@ -131,6 +131,8 @@ bool BlinnPhong::Init(HWND hWnd) {
 }
 
 void BlinnPhong::Update() {
+	static auto rotation = glm::vec3(45.0f, 0.0f, 0.0f);
+
 	// GUI
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -173,7 +175,6 @@ void BlinnPhong::Update() {
 	if (ImGui::RadioButton("spot", light->type == LightType::Spot)) {
 		light->type = LightType::Spot;
 	}
-	static auto rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 	if (light->type == LightType::Directional) {
 		if (ImGui::DragFloat3("rotation", &rotation.x, 1.0f)) {
 			const float yaw = glm::radians(rotation.y);
