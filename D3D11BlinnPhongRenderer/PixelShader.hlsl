@@ -60,12 +60,44 @@ float3 DirectionalLight(float3 normal, float3 eyeVec) {
     return BlinnPhong(normal, lightVec, lightStrength, eyeVec);
 }
 
-float3 PointLight(float3 normal, float3 eyeVec) {
-    return float3(0.0f, 0.0f, 0.0f);
+float3 PointLight(float3 normal, float3 pos, float3 eyeVec) {
+    float3 lightVec = light.pos - pos;
+    
+    float dist = length(lightVec);
+    
+    if (dist > light.fallOffEnd) {
+        return float3(0.0f, 0.0f, 0.0f);
+    } else {
+        lightVec /= dist;
+        
+        float3 lightStrength = light.strength * max(dot(lightVec, normal), 0.0f);
+        float attenuation = saturate((light.fallOffEnd - dist) / (light.fallOffEnd - light.fallOffStart));
+        lightStrength *= attenuation;
+        
+        return BlinnPhong(normal, lightVec, lightStrength, eyeVec);
+    }
 }
 
-float3 SpotLight(float3 normal, float3 eyeVec) {
-    return float3(0.0f, 0.0f, 0.0f);
+float3 SpotLight(float3 normal, float3 pos, float3 eyeVec) {
+    float3 lightVec = light.pos - pos;
+    
+    float dist = length(lightVec);
+    
+    if (dist > light.fallOffEnd) {
+        return float3(0.0f, 0.0f, 0.0f);
+    } else {
+        lightVec /= dist;
+        
+        float3 lightStrength = light.strength * max(dot(lightVec, normal), 0.0f);
+        
+        float attenuation = saturate((light.fallOffEnd - dist) / (light.fallOffEnd - light.fallOffStart));
+        lightStrength *= attenuation;
+        
+        float spotFactor = pow(max(dot(-lightVec, light.dir), 0.0f), light.spotPower);
+        lightStrength *= spotFactor;
+        
+        return BlinnPhong(normal, lightVec, lightStrength, eyeVec);
+    }
 }
 
 float4 main(PSInput input) : SV_TARGET {
@@ -75,9 +107,9 @@ float4 main(PSInput input) : SV_TARGET {
     if (light.type == DIRECTIONAL) {
         color += DirectionalLight(input.normal, eyeVec);
     } else if (light.type == POINT) {
-        color += PointLight(input.normal, eyeVec);
+        color += PointLight(input.normal, input.posWorld, eyeVec);
     } else if (light.type == SPOT) {
-        color += SpotLight(input.normal, eyeVec);
+        color += SpotLight(input.normal, input.posWorld, eyeVec);
     } else {
         color += float3(1.0f, 0.0f, 0.0f);
     }

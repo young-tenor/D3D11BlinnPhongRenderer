@@ -204,15 +204,30 @@ void BlinnPhong::Update() {
 	if (ImGui::RadioButton("spot", light->type == LightType::Spot)) {
 		light->type = LightType::Spot;
 	}
+	static auto rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 	if (light->type == LightType::Directional) {
-		ImGui::SliderFloat3("direction", &light->dir.x, -1.0f, 1.0f);
+		if (ImGui::DragFloat3("rotation", &rotation.x, 1.0f)) {
+			const float yaw = glm::radians(rotation.y);
+			const float pitch = glm::radians(rotation.x);
+
+			light->dir.x = cos(pitch) * sin(yaw);
+			light->dir.y = -sin(pitch);
+			light->dir.z = cos(pitch) * cos(yaw);
+		}
 	} else if (light->type == LightType::Point) {
 		ImGui::DragFloat3("position", &light->pos.x, 0.1f);
 		ImGui::SliderFloat("fall off start", &light->fallOffStart, 0.0f, 10.0f);
 		ImGui::SliderFloat("fall off end", &light->fallOffEnd, 0.0f, 50.0f);
 	} else if (light->type == LightType::Spot) {
 		ImGui::DragFloat3("position", &light->pos.x, 0.1f);
-		ImGui::SliderFloat3("direction", &light->dir.x, -1.0f, 1.0f);
+		if (ImGui::DragFloat3("rotation", &rotation.x, 1.0f)) {
+			const float yaw = glm::radians(rotation.y);
+			const float pitch = glm::radians(rotation.x);
+
+			light->dir.x = cos(pitch) * sin(yaw);
+			light->dir.y = -sin(pitch);
+			light->dir.z = cos(pitch) * cos(yaw);
+		}
 		ImGui::SliderFloat("fall off start", &light->fallOffStart, 0.0f, 10.0f);
 		ImGui::SliderFloat("fall off end", &light->fallOffEnd, 0.0f, 50.0f);
 		ImGui::SliderFloat("spot power", &light->spotPower, 1.0f, 128.0f);
