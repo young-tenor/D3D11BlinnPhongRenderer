@@ -114,5 +114,9 @@ float4 main(PSInput input) : SV_TARGET {
         color += float3(1.0f, 0.0f, 0.0f);
     }
     
+    if (useTexture) {
+        color *= g_texture.Sample(g_sampler, input.texcoord).rgb;
+    }
+    
     return float4(color, 1.0f);
 }
