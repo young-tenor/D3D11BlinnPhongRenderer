@@ -3,7 +3,7 @@
 
 class Camera {
 public:
-    Camera(HWND h_wnd);
+    Camera(HWND hWnd);
 
     void Update();
 

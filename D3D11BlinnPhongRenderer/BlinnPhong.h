@@ -31,7 +31,7 @@ class BlinnPhong : public App {
 public:
 	~BlinnPhong() override = default;
 
-	bool Init(HWND h_wnd) override;
+	bool Init(HWND hWnd) override;
 	void Update() override;
 	void Render() override;
 
