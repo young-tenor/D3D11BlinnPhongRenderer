@@ -28,6 +28,9 @@
     <Filter Include="Shader Files\BlinnPhong">
       <UniqueIdentifier>{5d7e1e2a-7db0-41b8-a48f-a7c3f446eb0e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\Tessellation">
+      <UniqueIdentifier>{eb3ad41f-b3ee-45a0-a9fc-47cb9586b34b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11BlinnPhongRenderer.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="Billboard.cpp">
       <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Tessellation.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +98,9 @@
     <ClInclude Include="Billboard.h">
       <Filter>Header Files\App</Filter>
     </ClInclude>
+    <ClInclude Include="Tessellation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BillboardGS.hlsl">
@@ -108,6 +117,12 @@
     </FxCompile>
     <FxCompile Include="BlinnPhongVS.hlsl">
       <Filter>Shader Files\BlinnPhong</Filter>
+    </FxCompile>
+    <FxCompile Include="TessellationVS.hlsl">
+      <Filter>Shader Files\Tessellation</Filter>
+    </FxCompile>
+    <FxCompile Include="TessellationPS.hlsl">
+      <Filter>Shader Files\Tessellation</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
