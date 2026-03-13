@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "App.h"
 #include "BlinnPhong.h"
+#include "Billboard.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -22,8 +23,9 @@ int main() {
 	}
 
 	const auto blinnPhong = new BlinnPhong();
+	const auto billboard = new Billboard();
 
-	App *app = blinnPhong;
+	App *app = billboard;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
