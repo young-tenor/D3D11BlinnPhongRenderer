@@ -51,7 +51,7 @@ float3 BlinnPhong(float3 normal, float3 lightVec, float3 lightStrength, float3 t
     float3 halfway = normalize(lightVec + toEye);
     float3 specular = material.specular * pow(max(dot(normal, halfway), 0.0f), material.shininess);
     
-    return material.ambient + (material.diffuse + specular) * lightStrength;
+    return (material.diffuse + specular) * lightStrength;
 }
 
 float3 DirectionalLight(float3 normal, float3 toEye) {
@@ -103,7 +103,7 @@ float3 SpotLight(float3 normal, float3 pos, float3 toEye) {
 float4 main(PSInput input) : SV_TARGET {
     float3 toEye = normalize(eyePos - input.posWorld);
     
-    float3 color = float3(0.0f, 0.0f, 0.0f);
+    float3 color = material.ambient;
     if (light.type == DIRECTIONAL) {
         color += DirectionalLight(input.normal, toEye);
     } else if (light.type == POINT) {
