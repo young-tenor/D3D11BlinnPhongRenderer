@@ -80,7 +80,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 
 	// vertex shader
 	ID3DBlob *vsBlob = nullptr;
-	hr = D3DCompileFromFile(L"VertexShader.hlsl", nullptr, nullptr, "main", "vs_5_0", 0, 0, &vsBlob, nullptr);
+	hr = D3DCompileFromFile(L"BlinnPhongVS.hlsl", nullptr, nullptr, "main", "vs_5_0", 0, 0, &vsBlob, nullptr);
 	if (FAILED(hr)) {
 		std::cout << "D3DCompileFromFile() failed: vertex shader" << std::endl;
 		return false;
@@ -99,7 +99,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 
 	// pixel shader
 	ID3DBlob *psBlob = nullptr;
-	hr = D3DCompileFromFile(L"PixelShader.hlsl", nullptr, nullptr, "main", "ps_5_0", 0, 0, &psBlob, nullptr);
+	hr = D3DCompileFromFile(L"BlinnPhongPS.hlsl", nullptr, nullptr, "main", "ps_5_0", 0, 0, &psBlob, nullptr);
 	if (FAILED(hr)) {
 		std::cout << "D3DCompileFromFile() failed: pixel shader" << std::endl;
 		return false;
