@@ -25,7 +25,7 @@ int main() {
 	const auto blinnPhong = new BlinnPhong();
 	const auto billboard = new Billboard();
 
-	App *app = billboard;
+	App *app = blinnPhong;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

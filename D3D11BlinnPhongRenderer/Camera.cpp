@@ -11,6 +11,10 @@ void Camera::Update() {
 
     static POINT prevPos = curPos;
 
+    float wheel = ImGui::GetIO().MouseWheel;
+    radius -= wheel;
+    radius = std::clamp(radius, 1.0f, 10.f);
+
     bool lbuttonDown = GetAsyncKeyState(VK_LBUTTON) & 0x8000;
 
     if (lbuttonDown) {

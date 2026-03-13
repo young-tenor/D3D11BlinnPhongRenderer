@@ -131,45 +131,14 @@ bool BlinnPhong::Init(HWND hWnd) {
 }
 
 void BlinnPhong::Update() {
-	if (!ImGui::GetIO().WantCaptureMouse) {
-		camera->Update();
-	}
-
-	// per object
-	const auto model = glm::mat4(1.0f);
-	const auto view = camera->view;
-	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-
-	PerObject perObject;
-
-	perObject.model = glm::transpose(model);
-	perObject.viewProj = glm::transpose(proj * view);
-	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
-
-	perObject.material.ambient = material->ambient;
-	perObject.material.diffuse = material->diffuse;
-	perObject.material.specular = material->specular;
-	perObject.material.shininess = material->shininess;
-
-	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(perObjectBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, &perObject, sizeof(PerObject));
-	context->Unmap(perObjectBuffer, 0);
-
-	// per frame
-	PerFrame perFrame;
-	perFrame.light = *light;
-	perFrame.eyePos = camera->pos;
-	perFrame.useTexture = useTexture;
-
-	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
-	context->Unmap(perFrameBuffer, 0);
-
 	// GUI
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	if (!ImGui::GetIO().WantCaptureMouse) {
+		camera->Update();
+	}
 
 	ImGui::Begin("Blinn-Phong");
 
@@ -235,6 +204,39 @@ void BlinnPhong::Update() {
 	ImGui::SliderFloat("strength", &light->strength, 0.0f, 5.0f);
 
 	ImGui::End();
+
+	// per object
+	const auto model = glm::mat4(1.0f);
+	const auto view = camera->view;
+	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
+	PerObject perObject;
+
+	perObject.model = glm::transpose(model);
+	perObject.viewProj = glm::transpose(proj * view);
+	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
+
+	perObject.material.ambient = material->ambient;
+	perObject.material.diffuse = material->diffuse;
+	perObject.material.specular = material->specular;
+	perObject.material.shininess = material->shininess;
+
+	D3D11_MAPPED_SUBRESOURCE resource;
+	context->Map(perObjectBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, &perObject, sizeof(PerObject));
+	context->Unmap(perObjectBuffer, 0);
+
+	// per frame
+	PerFrame perFrame;
+	perFrame.light = *light;
+	perFrame.eyePos = camera->pos;
+	perFrame.useTexture = useTexture;
+
+	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
+	context->Unmap(perFrameBuffer, 0);
+
+	
 }
 
 void BlinnPhong::Render() {

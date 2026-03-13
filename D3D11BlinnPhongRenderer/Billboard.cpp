@@ -103,9 +103,18 @@ bool Billboard::Init(HWND hWnd) {
 }
 
 void Billboard::Update() {
+	// GUI
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 	if (!ImGui::GetIO().WantCaptureMouse) {
 		camera->Update();
 	}
+
+	ImGui::Begin("Billboard");
+
+	ImGui::End();
 
 	// per object
 	const auto view = camera->view;
@@ -126,15 +135,6 @@ void Billboard::Update() {
 	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
 	context->Unmap(perFrameBuffer, 0);
-
-	// GUI
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-
-	ImGui::Begin("Billboard");
-
-	ImGui::End();
 }
 
 void Billboard::Render() {
