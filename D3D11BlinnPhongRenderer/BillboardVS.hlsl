@@ -6,7 +6,7 @@ struct VSInput {
 
 
 struct GSInput {
-    float4 pos : SV_POSITION;
+    float4 pos : POSITION;
 };
 
 GSInput main(VSInput input) {

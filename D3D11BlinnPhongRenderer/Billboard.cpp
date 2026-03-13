@@ -15,6 +15,11 @@ bool Billboard::Init(HWND hWnd) {
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
 
+	// rasterizer state
+	D3D11_RASTERIZER_DESC rasterizerDesc = {};
+	rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+	rasterizerDesc.CullMode = D3D11_CULL_NONE;
+
 	// vertex buffer
 	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -147,8 +152,8 @@ void Billboard::Render() {
 	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-	context->GSSetConstantBuffers(0, 1, &perObjectBuffer);
-	context->PSSetConstantBuffers(0, 1, &perFrameBuffer);
+	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
+	context->GSSetConstantBuffers(0, 2, constant_buffers);
 	context->VSSetShader(vs, nullptr, 0);
 	context->GSSetShader(gs, nullptr, 0);
 	context->PSSetShader(ps, nullptr, 0);
