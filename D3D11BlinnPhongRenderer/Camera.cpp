@@ -5,15 +5,23 @@ Camera::Camera(HWND hWnd) : hWnd(hWnd) {
 }
 
 void Camera::Update() {
+    UpdateDistance();
+    UpdatePosition();
+    view = glm::lookAtLH(pos, at, up);
+}
+
+void Camera::UpdateDistance() {
+    float wheel = ImGui::GetIO().MouseWheel;
+    dist -= wheel;
+    dist = std::clamp(dist, 1.0f, 10.f);
+}
+
+void Camera::UpdatePosition() {
     POINT curPos;
     GetCursorPos(&curPos);
     ScreenToClient(hWnd, &curPos);
 
     static POINT prevPos = curPos;
-
-    float wheel = ImGui::GetIO().MouseWheel;
-    radius -= wheel;
-    radius = std::clamp(radius, 1.0f, 10.f);
 
     bool lbuttonDown = GetAsyncKeyState(VK_LBUTTON) & 0x8000;
 
@@ -30,13 +38,11 @@ void Camera::Update() {
     const float limit = glm::radians(89.0f);
     pitch = std::clamp(pitch, -limit, limit);
 
-    glm::vec4 initialPos = glm::vec4(0.0f, 0.0f, -radius, 1.0f);
+    glm::vec4 initialPos = glm::vec4(0.0f, 0.0f, -dist, 1.0f);
 
     glm::mat4 rotation = glm::mat4(1.0f);
     rotation = glm::rotate(rotation, yaw, glm::vec3(0.0f, 1.0f, 0.0f));
     rotation = glm::rotate(rotation, pitch, glm::vec3(1.0f, 0.0f, 0.0f));
 
     pos = glm::vec3(rotation * initialPos);
-
-    view = glm::lookAtLH(pos, at, up);
 }

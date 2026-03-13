@@ -7,12 +7,16 @@ public:
 
     void Update();
 
+private:
+    void UpdateDistance();
+    void UpdatePosition();
+
 public:
     HWND hWnd;
     float width = 1280.0f;
     float height = 720.0f;
 
-    float radius = 3.0f;
+    float dist = 3.0f;
     float yaw = 0.0f;
     float pitch = 0.0f;
     glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
