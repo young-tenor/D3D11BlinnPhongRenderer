@@ -3,7 +3,11 @@ struct PSInput {
     float2 texcoord : TEXCOORD;
 };
 
-float4 main(PSInput input) : SV_TARGET {
-    return float4(input.texcoord, 0.0f, 1.0f);
+Texture2D g_texture : register(t0);
+SamplerState g_sampler : register(s0);
 
+float4 main(PSInput input) : SV_TARGET {
+    float4 color = g_texture.Sample(g_sampler, input.texcoord);
+    clip(color.a - 0.1f);
+    return color;
 }

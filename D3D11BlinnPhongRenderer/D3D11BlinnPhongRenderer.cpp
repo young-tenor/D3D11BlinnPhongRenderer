@@ -27,7 +27,7 @@ int main() {
 	const auto billboard = new Billboard();
 	const auto tessellation = new Tessellation();
 
-	App *app = tessellation;
+	App *app = billboard;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

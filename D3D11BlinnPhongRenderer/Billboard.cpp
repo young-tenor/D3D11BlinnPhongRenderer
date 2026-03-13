@@ -2,6 +2,7 @@
 #include "Billboard.h"
 #include "Camera.h"
 #include "Vertex.h"
+#include "TextureLoader.h"
 
 bool Billboard::Init(HWND hWnd) {
 	if (!App::Init(hWnd)) {
@@ -98,6 +99,25 @@ bool Billboard::Init(HWND hWnd) {
 
 	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
 	psBlob->Release();
+
+	// sampler
+	D3D11_SAMPLER_DESC samplerDesc = { };
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	hr = device->CreateSamplerState(&samplerDesc, &samplerState);
+	if (FAILED(hr)) {
+		std::cout << "CreateSamplerState() failed." << std::endl;
+		return false;
+	}
+
+	// texture
+	TextureLoader::CreateTexture(device, "./tree.png", &srv);
 
 	return true;
 }
