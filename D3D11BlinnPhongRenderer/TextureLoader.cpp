@@ -11,7 +11,7 @@ bool TextureLoader::CreateTexture(ID3D11Device *device, const char *fileName, ID
         return false;
     }
 
-    D3D11_TEXTURE2D_DESC textureDesc = { 0 };
+    D3D11_TEXTURE2D_DESC textureDesc = { };
     textureDesc.Width = (UINT)width;
     textureDesc.Height = (UINT)height;
     textureDesc.MipLevels = 1;
@@ -21,7 +21,7 @@ bool TextureLoader::CreateTexture(ID3D11Device *device, const char *fileName, ID
     textureDesc.Usage = D3D11_USAGE_DEFAULT;
     textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
-    D3D11_SUBRESOURCE_DATA initialData = { 0 };
+    D3D11_SUBRESOURCE_DATA initialData = { };
     initialData.pSysMem = imageData;
     initialData.SysMemPitch = (UINT)(width * 4);
 

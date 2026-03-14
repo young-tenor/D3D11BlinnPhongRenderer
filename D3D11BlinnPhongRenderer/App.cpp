@@ -37,7 +37,7 @@ bool App::Init(HWND hWnd) {
 	UINT msaaQuality = 0;
 	device->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &msaaQuality);
 
-	DXGI_SWAP_CHAIN_DESC swapChainDesc = { 0 };
+	DXGI_SWAP_CHAIN_DESC swapChainDesc = { };
 	swapChainDesc.BufferCount = 1;
 	swapChainDesc.BufferDesc.Width = (UINT)width;
 	swapChainDesc.BufferDesc.Height = (UINT)height;
@@ -97,7 +97,7 @@ bool App::Init(HWND hWnd) {
 
 	// depth stencil view
 	ID3D11Texture2D *depthBuffer = nullptr;
-	D3D11_TEXTURE2D_DESC depthBufferDesc = { 0 };
+	D3D11_TEXTURE2D_DESC depthBufferDesc = { };
 	depthBufferDesc.Width = (UINT)width;
 	depthBufferDesc.Height = (UINT)height;
 	depthBufferDesc.MipLevels = 1;

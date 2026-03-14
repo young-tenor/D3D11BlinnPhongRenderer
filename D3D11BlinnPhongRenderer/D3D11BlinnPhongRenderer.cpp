@@ -27,14 +27,14 @@ int main() {
 	const auto billboard = new Billboard();
 	const auto tessellation = new Tessellation();
 
-	App *app = billboard;
+	App *app = blinnPhong;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
 		return -1;
 	}
 
-	MSG msg = { 0 };
+	MSG msg = { };
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&msg);
@@ -49,7 +49,7 @@ int main() {
 }
 
 ATOM MyRegisterClass(HINSTANCE hInstance) {
-	WNDCLASSEXW wcex = { 0 };
+	WNDCLASSEXW wcex = { };
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;

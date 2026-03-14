@@ -22,12 +22,12 @@ bool Billboard::Init(HWND hWnd) {
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;
 
 	// vertex buffer
-	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
+	D3D11_BUFFER_DESC vertexBufferDesc = { };
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(Vertex);
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA vertexData = { 0 };
+	D3D11_SUBRESOURCE_DATA vertexData = { };
 	vertexData.pSysMem = &vertex;
 	HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &vertexData, &vertexBuffer);
 	if (FAILED(hr)) {
@@ -36,7 +36,7 @@ bool Billboard::Init(HWND hWnd) {
 	}
 
 	// constant buffer
-	D3D11_BUFFER_DESC constBufferDesc = { 0 };
+	D3D11_BUFFER_DESC constBufferDesc = { };
 	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	constBufferDesc.ByteWidth = sizeof(PerObject);
 	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;

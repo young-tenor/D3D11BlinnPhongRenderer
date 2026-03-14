@@ -18,7 +18,7 @@ protected:
 	ID3D11DeviceContext *context = nullptr;
 	IDXGISwapChain *swapChain = nullptr;
 
-	D3D11_VIEWPORT viewport = { 0 };
+	D3D11_VIEWPORT viewport = { };
 	ID3D11RenderTargetView *rtv = nullptr;
 	ID3D11DepthStencilView *dsv = nullptr;
 };

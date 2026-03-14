@@ -27,12 +27,12 @@ bool BlinnPhong::Init(HWND hWnd) {
 	material->shininess = 32.0f;
 
 	// vertex buffer
-	D3D11_BUFFER_DESC vertexBufferDesc = { 0 };
+	D3D11_BUFFER_DESC vertexBufferDesc = { };
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = mesh->vertices.size() * sizeof(Vertex);
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA verticesData = { 0 };
+	D3D11_SUBRESOURCE_DATA verticesData = { };
 	verticesData.pSysMem = mesh->vertices.data();
 	HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &verticesData, &vertexBuffer);
 	if (FAILED(hr)) {
@@ -41,12 +41,12 @@ bool BlinnPhong::Init(HWND hWnd) {
 	}
 
 	// index buffer
-	D3D11_BUFFER_DESC indexBufferDesc = { 0 };
+	D3D11_BUFFER_DESC indexBufferDesc = { };
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = mesh->indices.size() * sizeof(int);
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA indicesData = { 0 };
+	D3D11_SUBRESOURCE_DATA indicesData = { };
 	indicesData.pSysMem = mesh->indices.data();
 	hr = device->CreateBuffer(&indexBufferDesc, &indicesData, &indexBuffer);
 	if (FAILED(hr)) {
@@ -55,7 +55,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	}
 
 	// constant buffer
-	D3D11_BUFFER_DESC constBufferDesc = { 0 };
+	D3D11_BUFFER_DESC constBufferDesc = { };
 	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	constBufferDesc.ByteWidth = sizeof(PerObject);
 	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
@@ -109,7 +109,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	psBlob->Release();
 
 	// sampler
-	D3D11_SAMPLER_DESC samplerDesc = { 0 };
+	D3D11_SAMPLER_DESC samplerDesc = { };
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
