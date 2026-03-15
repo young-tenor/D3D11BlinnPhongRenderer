@@ -1,6 +1,18 @@
 #include "pch.h"
 #include "MeshGenerator.h"
 
+std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GeneratePoint() {
+    std::vector<Vertex> vertices;
+    std::vector<UINT> indices;
+
+    vertices.resize(1);
+    vertices[0].pos = glm::vec3(0.0f, 0.0f, 0.0f);
+
+    indices.push_back(0);
+
+    return { vertices, indices };
+}
+
 std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateSquare() {
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;

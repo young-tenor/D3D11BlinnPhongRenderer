@@ -40,16 +40,16 @@ bool BlinnPhong::Init(HWND hWnd) {
 	light = new Light();
 
 	auto [vertices, indices] = MeshGenerator::GenerateSphere();
-	Mesh *mesh = new Mesh(*device, vertices, indices);
+	auto mesh = new Mesh(*device, vertices, indices);
 
-	Shader *shader = new Shader(*device);
+	auto shader = new Shader(*device, L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
 
 	materialData = new Material::Data();
 	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 	materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
 	materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
 	materialData->shininess = 32.0f;
-	Material *material = new Material(*device, *materialData, *shader, "./brick-texture.png");
+	auto material = new Material(*device, *materialData, *shader, "brick-texture.png");
 
 	object = new Object(*mesh, *material);
 

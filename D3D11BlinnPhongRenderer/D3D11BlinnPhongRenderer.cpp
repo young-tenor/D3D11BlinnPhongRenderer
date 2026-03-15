@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "App.h"
 #include "BlinnPhong.h"
-//#include "Billboard.h"
+#include "Billboard.h"
 //#include "Tessellation.h"
 
 HINSTANCE hInst;
@@ -24,10 +24,10 @@ int main() {
 	}
 
 	const auto blinnPhong = new BlinnPhong();
-	//const auto billboard = new Billboard();
+	const auto billboard = new Billboard();
 	//const auto tessellation = new Tessellation();
 
-	App *app = blinnPhong;
+	App *app = billboard;
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
