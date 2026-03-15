@@ -16,8 +16,8 @@ bool Tessellation::Init(HWND hWnd) {
 
 	light = new Light();
 
-	mesh = new Mesh();
-	MeshGenerator::GenerateSphere(*mesh, 0.5f, 16, 16);
+	//mesh = new Mesh();
+	//MeshGenerator::GenerateSphere(*mesh, 0.5f, 16, 16);
 
 	material = new Material();
 	material->ambient = glm::vec3(0.1f, 0.1f, 0.1f);

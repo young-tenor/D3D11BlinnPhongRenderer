@@ -2,6 +2,8 @@
 #include "Billboard.h"
 #include "Camera.h"
 #include "Vertex.h"
+#include "Mesh.h"
+#include "MeshGenerator.h"
 #include "TextureLoader.h"
 
 bool Billboard::Init(HWND hWnd) {
@@ -15,6 +17,9 @@ bool Billboard::Init(HWND hWnd) {
 
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	//floor = new Mesh();
+	//MeshGenerator::GenerateSquare(*floor);
 
 	// rasterizer state
 	D3D11_RASTERIZER_DESC rasterizerDesc = {};
@@ -180,7 +185,7 @@ void Billboard::Render() {
 	context->PSSetShaderResources(0, 1, &srv);
 	context->PSSetSamplers(0, 1, &samplerState);
 
-	context->Draw(1, 0);
+	context->DrawIndexed(1, 0, 0);
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

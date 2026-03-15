@@ -2,6 +2,7 @@
 #define NOMINMAX
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <d3d11.h>
 #include <d3dcompiler.h>

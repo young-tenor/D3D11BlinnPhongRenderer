@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "App.h"
 #include "BlinnPhong.h"
-#include "Billboard.h"
-#include "Tessellation.h"
+//#include "Billboard.h"
+//#include "Tessellation.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -24,8 +24,8 @@ int main() {
 	}
 
 	const auto blinnPhong = new BlinnPhong();
-	const auto billboard = new Billboard();
-	const auto tessellation = new Tessellation();
+	//const auto billboard = new Billboard();
+	//const auto tessellation = new Tessellation();
 
 	App *app = blinnPhong;
 

@@ -4,7 +4,6 @@ struct VSInput {
     float2 texcoord : TEXCOORD;
 };
 
-
 struct GSInput {
     float4 pos : POSITION;
 };

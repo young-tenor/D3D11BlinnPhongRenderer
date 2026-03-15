@@ -1,56 +1,11 @@
 #include "pch.h"
 #include "BlinnPhong.h"
-#include "Camera.h"
-#include "Mesh.h"
 #include "MeshGenerator.h"
-#include "TextureLoader.h"
+#include "Shader.h"
+#include "Constants.h"
 
 bool BlinnPhong::Init(HWND hWnd) {
 	if (!App::Init(hWnd)) {
-		return false;
-	}
-
-	camera = new Camera(hWnd);
-	camera->width = width;
-	camera->height = height;
-
-	light = new Light();
-
-	mesh = new Mesh();
-	//MeshGenerator::GenerateCube(*mesh);
-	MeshGenerator::GenerateSphere(*mesh);
-
-	material = new Material();
-	material->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-	material->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
-	material->specular = glm::vec3(0.5f, 0.5f, 0.5f);
-	material->shininess = 32.0f;
-
-	// vertex buffer
-	D3D11_BUFFER_DESC vertexBufferDesc = { };
-	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = mesh->vertices.size() * sizeof(Vertex);
-	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA verticesData = { };
-	verticesData.pSysMem = mesh->vertices.data();
-	HRESULT hr = device->CreateBuffer(&vertexBufferDesc, &verticesData, &vertexBuffer);
-	if (FAILED(hr)) {
-		std::cout << "CreateBuffer() failed: vertex buffer" << std::endl;
-		return false;
-	}
-
-	// index buffer
-	D3D11_BUFFER_DESC indexBufferDesc = { };
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = mesh->indices.size() * sizeof(int);
-	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-
-	D3D11_SUBRESOURCE_DATA indicesData = { };
-	indicesData.pSysMem = mesh->indices.data();
-	hr = device->CreateBuffer(&indexBufferDesc, &indicesData, &indexBuffer);
-	if (FAILED(hr)) {
-		std::cout << "CreateBuffer() failed: index buffer" << std::endl;
 		return false;
 	}
 
@@ -61,7 +16,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	hr = device->CreateBuffer(&constBufferDesc, nullptr, &perObjectBuffer);
+	HRESULT hr = device->CreateBuffer(&constBufferDesc, nullptr, &perObjectBuffer);
 	if (FAILED(hr)) {
 		std::cout << "CreateBuffer() failed: constant buffer per object" << std::endl;
 		return false;
@@ -78,54 +33,25 @@ bool BlinnPhong::Init(HWND hWnd) {
 		return false;
 	}
 
-	// vertex shader
-	ID3DBlob *vsBlob = nullptr;
-	hr = D3DCompileFromFile(L"BlinnPhongVS.hlsl", nullptr, nullptr, "main", "vs_5_0", 0, 0, &vsBlob, nullptr);
-	if (FAILED(hr)) {
-		std::cout << "D3DCompileFromFile() failed: vertex shader" << std::endl;
-		return false;
-	}
+	camera = new Camera(hWnd);
+	camera->width = width;
+	camera->height = height;
 
-	// input layout
-	D3D11_INPUT_ELEMENT_DESC inputElementDesc[] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 4 * 3 + 4 * 3, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	device->CreateInputLayout(inputElementDesc, 3, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), &inputLayout);
+	light = new Light();
 
-	device->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, &vs);
-	vsBlob->Release();
+	auto [vertices, indices] = MeshGenerator::GenerateSphere();
+	Mesh *mesh = new Mesh(*device, vertices, indices);
 
-	// pixel shader
-	ID3DBlob *psBlob = nullptr;
-	hr = D3DCompileFromFile(L"BlinnPhongPS.hlsl", nullptr, nullptr, "main", "ps_5_0", 0, 0, &psBlob, nullptr);
-	if (FAILED(hr)) {
-		std::cout << "D3DCompileFromFile() failed: pixel shader" << std::endl;
-		return false;
-	}
+	Shader *shader = new Shader(*device);
 
-	device->CreatePixelShader(psBlob->GetBufferPointer(), psBlob->GetBufferSize(), nullptr, &ps);
-	psBlob->Release();
+	materialData = new Material::Data();
+	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+	materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
+	materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	materialData->shininess = 32.0f;
+	Material *material = new Material(*device, *materialData, *shader, "./brick-texture.png");
 
-	// sampler
-	D3D11_SAMPLER_DESC samplerDesc = { };
-	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-	samplerDesc.MinLOD = 0;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	hr = device->CreateSamplerState(&samplerDesc, &samplerState);
-	if (FAILED(hr)) {
-		std::cout << "CreateSamplerState() failed." << std::endl;
-		return false;
-	}
-
-	// texture
-	TextureLoader::CreateTexture(device, "./brick-texture.png", &srv);
+	object = new Object(*mesh, *material);
 
 	return true;
 }
@@ -146,19 +72,19 @@ void BlinnPhong::Update() {
 
 	ImGui::Text("material");
 
-	if (ImGui::SliderFloat("ambient", &material->ambient.x, 0.0f, 1.0f)) {
-		material->ambient.y = material->ambient.x;
-		material->ambient.z = material->ambient.x;
+	if (ImGui::SliderFloat("ambient", &materialData->ambient.x, 0.0f, 1.0f)) {
+		materialData->ambient.y = materialData->ambient.x;
+		materialData->ambient.z = materialData->ambient.x;
 	}
-	if (ImGui::SliderFloat("diffuse", &material->diffuse.x, 0.0f, 1.0f)) {
-		material->diffuse.y = material->diffuse.x;
-		material->diffuse.z = material->diffuse.x;
+	if (ImGui::SliderFloat("diffuse", &materialData->diffuse.x, 0.0f, 1.0f)) {
+		materialData->diffuse.y = materialData->diffuse.x;
+		materialData->diffuse.z = materialData->diffuse.x;
 	}
-	if (ImGui::SliderFloat("specular", &material->specular.x, 0.0f, 1.0f)) {
-		material->specular.y = material->specular.x;
-		material->specular.z = material->specular.x;
+	if (ImGui::SliderFloat("specular", &materialData->specular.x, 0.0f, 1.0f)) {
+		materialData->specular.y = materialData->specular.x;
+		materialData->specular.z = materialData->specular.x;
 	}
-	ImGui::SliderFloat("shininess", &material->shininess, 1.0f, 256.0f);
+	ImGui::SliderFloat("shininess", &materialData->shininess, 1.0f, 256.0f);
 	ImGui::Checkbox("use texture", &useTexture);
 
 	ImGui::Separator();
@@ -206,38 +132,16 @@ void BlinnPhong::Update() {
 
 	ImGui::End();
 
-	// per object
-	const auto model = glm::mat4(1.0f);
-	const auto view = camera->view;
-	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-
-	PerObject perObject;
-
-	perObject.model = glm::transpose(model);
-	perObject.viewProj = glm::transpose(proj * view);
-	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
-
-	perObject.material.ambient = material->ambient;
-	perObject.material.diffuse = material->diffuse;
-	perObject.material.specular = material->specular;
-	perObject.material.shininess = material->shininess;
-
-	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(perObjectBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
-	memcpy(resource.pData, &perObject, sizeof(PerObject));
-	context->Unmap(perObjectBuffer, 0);
-
 	// per frame
 	PerFrame perFrame;
 	perFrame.light = *light;
 	perFrame.eyePos = camera->pos;
 	perFrame.useTexture = useTexture;
 
+	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
 	context->Unmap(perFrameBuffer, 0);
-
-	
 }
 
 void BlinnPhong::Render() {
@@ -251,20 +155,15 @@ void BlinnPhong::Render() {
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
-	context->IASetInputLayout(inputLayout);
-	context->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	context->IASetIndexBuffer(indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
 	context->VSSetConstantBuffers(0, 1, &perObjectBuffer);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
-	context->VSSetShader(vs, nullptr, 0);
-	context->PSSetShader(ps, nullptr, 0);
-	context->PSSetShaderResources(0, 1, &srv);
-	context->PSSetSamplers(0, 1, &samplerState);
 
-	context->DrawIndexed(mesh->indices.size(), 0, 0);
+	const auto view = camera->view;
+	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+	object->Render(*context, perObjectBuffer, proj * view);
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
