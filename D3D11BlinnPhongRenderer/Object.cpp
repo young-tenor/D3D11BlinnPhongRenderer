@@ -8,10 +8,18 @@ Object::Object(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material) :
 }
 
 void Object::Render(ID3D11DeviceContext *context, ID3D11Buffer *perObjectBuffer, const glm::mat4 &viewProj) const {
+	const auto s = glm::scale(glm::mat4(1.0f), scale);
+	auto r = glm::mat4(1.0f);
+	r = glm::rotate(r, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	r = glm::rotate(r, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	r = glm::rotate(r, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	const auto t = glm::translate(glm::mat4(1.0f), translation);
+	const auto model = t * r * s;
+
 	PerObject perObject;
-	perObject.model = glm::transpose(glm::mat4(1.0f));
+	perObject.model = glm::transpose(model);
 	perObject.viewProj = glm::transpose(viewProj);
-	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(perObject.model));
+	perObject.modelInvTr = glm::transpose(glm::inverseTranspose(model));
 	perObject.material = material->GetData();
 
 	D3D11_MAPPED_SUBRESOURCE resource;

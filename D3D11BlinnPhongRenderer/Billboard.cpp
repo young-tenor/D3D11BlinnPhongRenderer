@@ -45,22 +45,48 @@ bool Billboard::Init(HWND hWnd) {
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	auto [vertices, indices] = MeshGenerator::GeneratePoint();
-	auto point = std::make_shared<Mesh>(device.Get(), vertices, indices);
+	// tree
+	{
+		auto [vertices, indices] = MeshGenerator::GeneratePoint();
+		auto point = std::make_shared<Mesh>(device.Get(), vertices, indices);
 
-	auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
+		auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
 
-	auto treeMatData = std::make_shared<Material::Data>();
-	treeMatData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-	treeMatData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
-	treeMatData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
-	treeMatData->shininess = 32.0f;
-	auto treeMat = std::make_shared<Material>(device.Get(), treeMatData, shader, "tree.png");
+		auto materialData = std::make_shared<Material::Data>();
+		materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+		materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
+		materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
+		materialData->shininess = 32.0f;
 
-	object = std::make_unique<Object>(point, treeMat);
+		auto material = std::make_shared<Material>(device.Get(), materialData, shader, "tree.png");
 
-	//floor = new Mesh();
-	//MeshGenerator::GenerateSquare(*floor);
+		tree = std::make_unique<Object>(point, material);
+	}
+
+	// floor
+	{
+		auto [vertices, indices] = MeshGenerator::GenerateSquare();
+		auto square = std::make_shared<Mesh>(device.Get(), vertices, indices);
+
+		auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
+
+		auto materialData = std::make_shared<Material::Data>();
+		materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+		materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
+		materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
+		materialData->shininess = 32.0f;
+
+		auto material = std::make_shared<Material>(device.Get(), materialData, shader, "brick-texture.png");
+
+		floor = std::make_unique<Object>(square, material);
+
+		auto scale = glm::vec3(10.0f, 10.0f, 10.0f);
+		auto rotation = glm::vec3(90.0f, 0.0f, 0.0f);
+		auto translation = glm::vec3(0.0f, -0.5f, 0.0f);
+		floor->SetScale(scale);
+		floor->SetRotation(rotation);
+		floor->SetTranslation(translation);
+	}
 
 	return true;
 }
@@ -103,11 +129,15 @@ void Billboard::Render() {
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get()};
+	context->VSSetConstantBuffers(0, 2, constant_buffers);
 	context->GSSetConstantBuffers(0, 2, constant_buffers);
+	context->PSSetConstantBuffers(0, 2, constant_buffers);
 
 	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-	object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+	tree->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	floor->Render(context.Get(), perObjectBuffer.Get(), proj * view);
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

@@ -33,7 +33,7 @@ PSInput main(VSInput input) {
     
     output.posWorld = mul(float4(input.pos, 1.0f), model);
     output.pos = mul(float4(output.posWorld, 1.0f), viewProj);
-    output.normal = mul(float4(input.normal, 0.0f), modelInvTr);
+    output.normal = normalize(mul(float4(input.normal, 0.0f), modelInvTr));
     output.texcoord = input.texcoord;
     
     return output;
