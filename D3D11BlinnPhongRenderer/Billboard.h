@@ -28,7 +28,6 @@ private:
 	ComPtr<ID3D11Buffer> perFrameBuffer;
 
 	std::unique_ptr<Camera> camera;
-	std::unique_ptr<Object> tree;
-	std::unique_ptr<Object> floor;
+	std::vector<std::unique_ptr<Object>> trees;
 };
 

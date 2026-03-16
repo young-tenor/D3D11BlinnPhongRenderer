@@ -10,6 +10,8 @@ public:
     const glm::vec3 &GetPos() const { return pos; }
     const glm::mat4 &GetView() const { return view; }
 
+    void SetPitch(const float &pitch) { this->pitch = pitch; }
+
     void Update();
 
 private:

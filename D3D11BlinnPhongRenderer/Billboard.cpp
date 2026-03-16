@@ -60,32 +60,22 @@ bool Billboard::Init(HWND hWnd) {
 
 		auto material = std::make_shared<Material>(device.Get(), materialData, shader, "tree.png");
 
-		tree = std::make_unique<Object>(point, material);
-	}
+		for (int i = 0; i < 20; i++) {
+			auto tree1 = std::make_unique<Object>(point, material);
+			auto tree2 = std::make_unique<Object>(point, material);
 
-	// floor
-	{
-		auto [vertices, indices] = MeshGenerator::GenerateSquare();
-		auto square = std::make_shared<Mesh>(device.Get(), vertices, indices);
+			auto scale = glm::vec3(2.0f, 2.0f, 2.0f);
+			tree1->SetScale(scale);
+			tree2->SetScale(scale);
 
-		auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
+			auto translation1 = glm::vec3(-2.5f, 0.0f, -10.0f + (float)i * 2.0f);
+			auto translation2 = glm::vec3(2.5f, 0.0f, -10.0f + (float)i * 2.0f);
+			tree1->SetTranslation(translation1);
+			tree2->SetTranslation(translation2);
 
-		auto materialData = std::make_shared<Material::Data>();
-		materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-		materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
-		materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
-		materialData->shininess = 32.0f;
-
-		auto material = std::make_shared<Material>(device.Get(), materialData, shader, "brick-texture.png");
-
-		floor = std::make_unique<Object>(square, material);
-
-		auto scale = glm::vec3(10.0f, 10.0f, 10.0f);
-		auto rotation = glm::vec3(90.0f, 0.0f, 0.0f);
-		auto translation = glm::vec3(0.0f, -0.5f, 0.0f);
-		floor->SetScale(scale);
-		floor->SetRotation(rotation);
-		floor->SetTranslation(translation);
+			trees.push_back(std::move(tree1));
+			trees.push_back(std::move(tree2));
+		}
 	}
 
 	return true;
@@ -99,6 +89,7 @@ void Billboard::Update() {
 
 	if (!ImGui::GetIO().WantCaptureMouse) {
 		camera->Update();
+		camera->SetPitch(0.0f);
 	}
 
 	ImGui::Begin("Billboard");
@@ -135,9 +126,10 @@ void Billboard::Render() {
 
 	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-	tree->Render(context.Get(), perObjectBuffer.Get(), proj * view);
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	floor->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+
+	for (auto &object : trees) {
+		object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+	}
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

@@ -65,7 +65,10 @@ void main(point GSInput input[1], inout TriangleStream<PSInput> outStream) {
 
     PSInput output;
     for (int i = 0; i < 4; i++) {
-        output.pos = mul(v[i], viewProj);
+        float4 pos = v[i];
+        pos = mul(pos, model);
+        pos = mul(pos, viewProj);
+        output.pos = pos;
         output.texcoord = texcoord[i];
         outStream.Append(output);
     }
