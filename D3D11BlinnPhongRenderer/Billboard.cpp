@@ -41,8 +41,6 @@ bool Billboard::Init(HWND hWnd) {
 	}
 
 	camera = new Camera(hWnd);
-	camera->width = width;
-	camera->height = height;
 
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -83,7 +81,7 @@ void Billboard::Update() {
 
 	// per frame
 	PerFrame perFrame;
-	perFrame.eyePos = camera->pos;
+	perFrame.eyePos = camera->GetPos();
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
@@ -107,7 +105,7 @@ void Billboard::Render() {
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
 	context->GSSetConstantBuffers(0, 2, constant_buffers);
 
-	const auto view = camera->view;
+	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 	object->Render(*context, perObjectBuffer, proj * view);
 

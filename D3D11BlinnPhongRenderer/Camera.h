@@ -5,16 +5,21 @@ class Camera {
 public:
     Camera(HWND hWnd);
 
+    const UINT GetWidth() const { return width; }
+    const UINT GetHeight() const { return height; }
+    const glm::vec3 &GetPos() const { return pos; }
+    const glm::mat4 &GetView() const { return view; }
+
     void Update();
 
 private:
     void UpdateDistance();
     void UpdatePosition();
 
-public:
+private:
     HWND hWnd;
-    float width = 1280.0f;
-    float height = 720.0f;
+    UINT width = 1280;
+    UINT height = 720;
 
     float dist = 3.0f;
     float yaw = 0.0f;

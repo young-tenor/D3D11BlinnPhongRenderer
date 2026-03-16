@@ -34,8 +34,6 @@ bool BlinnPhong::Init(HWND hWnd) {
 	}
 
 	camera = new Camera(hWnd);
-	camera->width = width;
-	camera->height = height;
 
 	light = new Light();
 
@@ -135,7 +133,7 @@ void BlinnPhong::Update() {
 	// per frame
 	PerFrame perFrame;
 	perFrame.light = *light;
-	perFrame.eyePos = camera->pos;
+	perFrame.eyePos = camera->GetPos();
 	perFrame.useTexture = useTexture;
 
 	D3D11_MAPPED_SUBRESOURCE resource;
@@ -161,7 +159,7 @@ void BlinnPhong::Render() {
 	context->VSSetConstantBuffers(0, 1, &perObjectBuffer);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
 
-	const auto view = camera->view;
+	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
 	object->Render(*context, perObjectBuffer, proj * view);
 

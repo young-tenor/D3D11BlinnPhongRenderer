@@ -2,6 +2,10 @@
 #include "Camera.h"
 
 Camera::Camera(HWND hWnd) : hWnd(hWnd) {
+    RECT rc;
+    GetClientRect(hWnd, &rc);
+    width = rc.right - rc.left;
+    height = rc.bottom - rc.top;
 }
 
 void Camera::Update() {
