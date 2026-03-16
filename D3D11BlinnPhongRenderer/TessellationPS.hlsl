@@ -23,7 +23,9 @@ struct Light {
 };
 
 cbuffer PerObject : register(b0) {
+    matrix model;
     matrix viewProj;
+    matrix modelInvTr;
     Material material;
 }
 

@@ -10,9 +10,3 @@ struct PerObject {
 
 	Material::Data material;
 };
-
-struct PerFrame {
-	Light light;
-	glm::vec3 eyePos;
-	int useTexture;
-};

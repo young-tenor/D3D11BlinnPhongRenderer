@@ -15,6 +15,12 @@ public:
 	void Render() override;
 
 private:
+	struct PerFrame {
+		Light light;
+		glm::vec3 eyePos;
+		int useTexture;
+	};
+
 	ID3D11Buffer *perObjectBuffer = nullptr;
 	ID3D11Buffer *perFrameBuffer = nullptr;
 

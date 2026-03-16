@@ -5,7 +5,9 @@
 #include <stb_image.h>
 
 Material::Material(ID3D11Device &device, const Data &data, const Shader &shader, const std::string &texturePath) : data(&data), shader(&shader) {
-    CreateTexture(device, texturePath);
+    if (!texturePath.empty()) {
+        CreateTexture(device, texturePath);
+    }
     CreateSamplerState(device);
 }
 
