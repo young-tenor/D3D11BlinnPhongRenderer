@@ -1,7 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
 #include "Material.h"
-#include "Light.h"
 
 struct PerObject {
 	glm::mat4 model;
