@@ -10,8 +10,8 @@ public:
 
 protected:
 	HWND hWnd = nullptr;
-	float width = 1280.0f;
-	float height = 720.0f;
+	UINT width = 1280;
+	UINT height = 720;
 	float aspect = 1280.0f / 720.0f;
 
 	ID3D11Device *device = nullptr;

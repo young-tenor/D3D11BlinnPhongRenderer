@@ -8,7 +8,7 @@ bool App::Init(HWND hWnd) {
 	GetClientRect(hWnd, &rc);
 	width = rc.right - rc.left;
 	height = rc.bottom - rc.top;
-	aspect = width / height;
+	aspect = (float)width / height;
 
 	// device
 	D3D_FEATURE_LEVEL featureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
@@ -39,8 +39,8 @@ bool App::Init(HWND hWnd) {
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = { };
 	swapChainDesc.BufferCount = 1;
-	swapChainDesc.BufferDesc.Width = (UINT)width;
-	swapChainDesc.BufferDesc.Height = (UINT)height;
+	swapChainDesc.BufferDesc.Width = width;
+	swapChainDesc.BufferDesc.Height = height;
 	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -73,8 +73,8 @@ bool App::Init(HWND hWnd) {
 	}
 
 	// viewport
-	viewport.Width = width;
-	viewport.Height = height;
+	viewport.Width = (float)width;
+	viewport.Height = (float)height;
 	viewport.MinDepth = 0.0f;
 	viewport.MaxDepth = 1.0f;
 	viewport.TopLeftX = 0;
@@ -98,8 +98,8 @@ bool App::Init(HWND hWnd) {
 	// depth stencil view
 	ID3D11Texture2D *depthBuffer = nullptr;
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { };
-	depthBufferDesc.Width = (UINT)width;
-	depthBufferDesc.Height = (UINT)height;
+	depthBufferDesc.Width = width;
+	depthBufferDesc.Height = height;
 	depthBufferDesc.MipLevels = 1;
 	depthBufferDesc.ArraySize = 1;
 	depthBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
