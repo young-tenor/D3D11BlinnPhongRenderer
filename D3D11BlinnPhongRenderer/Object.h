@@ -5,11 +5,11 @@
 
 class Object {
 public:
-	Object(Mesh &mesh, Material &material);
+	Object(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 
-	void Render(ID3D11DeviceContext &context, ID3D11Buffer *perObjectBuffer, const glm::mat4 &viewProj);
+	void Render(ID3D11DeviceContext *context, ID3D11Buffer *perObjectBuffer, const glm::mat4 &viewProj) const;
 
 private:
-	Mesh *mesh;
-	Material *material;
+	std::shared_ptr<Mesh> mesh;
+	std::shared_ptr<Material> material;
 };

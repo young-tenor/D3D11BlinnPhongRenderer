@@ -1,5 +1,6 @@
 #pragma once
 #include "App.h"
+#include <wrl.h>
 #include <glm/glm.hpp>
 #include "Camera.h"
 #include "Light.h"
@@ -20,18 +21,18 @@ private:
 		float padding;
 	};
 
-	ID3D11RasterizerState *wireframeRasterizerState = nullptr;
+	ComPtr<ID3D11RasterizerState> wireframeRasterizerState;
 
-	ID3D11Buffer *perObjectBuffer = nullptr;
-	ID3D11Buffer *perFrameBuffer = nullptr;
+	ComPtr<ID3D11Buffer> perObjectBuffer;
+	ComPtr<ID3D11Buffer> perFrameBuffer;
 
 	//ID3D11SamplerState *samplerState = nullptr;
 	//ID3D11ShaderResourceView *srv = nullptr;
 
 	bool drawWireFrame = false;
 
-	Camera *camera = nullptr;
-	Light *light = nullptr;
-	Object *object = nullptr;
+	std::unique_ptr<Camera> camera;
+	std::unique_ptr<Light> light;
+	std::unique_ptr<Object> object;
 };
 

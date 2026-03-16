@@ -1,4 +1,7 @@
 #pragma once
+#include <wrl.h>
+
+using Microsoft::WRL::ComPtr;
 
 class App {
 public:
@@ -14,11 +17,11 @@ protected:
 	UINT height = 720;
 	float aspect = 1280.0f / 720.0f;
 
-	ID3D11Device *device = nullptr;
-	ID3D11DeviceContext *context = nullptr;
-	IDXGISwapChain *swapChain = nullptr;
+	ComPtr<ID3D11Device> device;
+	ComPtr<ID3D11DeviceContext> context;
+	ComPtr<IDXGISwapChain> swapChain;
 
 	D3D11_VIEWPORT viewport = { };
-	ID3D11RenderTargetView *rtv = nullptr;
-	ID3D11DepthStencilView *dsv = nullptr;
+	ComPtr<ID3D11RenderTargetView> rtv;
+	ComPtr<ID3D11DepthStencilView> dsv;
 };

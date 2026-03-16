@@ -33,23 +33,23 @@ bool BlinnPhong::Init(HWND hWnd) {
 		return false;
 	}
 
-	camera = new Camera(hWnd);
+	camera = std::make_unique<Camera>(hWnd);
 
-	light = new Light();
+	light = std::make_unique<Light>();
 
 	auto [vertices, indices] = MeshGenerator::GenerateSphere();
-	auto mesh = new Mesh(*device, vertices, indices);
+	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices);
 
-	auto shader = new Shader(*device, L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
 
-	materialData = new Material::Data();
+	materialData = std::make_shared<Material::Data>();
 	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 	materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
 	materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
 	materialData->shininess = 32.0f;
-	auto material = new Material(*device, *materialData, *shader, "brick-texture.png");
+	auto material = std::make_shared<Material>(device.Get(), materialData, shader, "brick-texture.png");
 
-	object = new Object(*mesh, *material);
+	object = std::make_unique<Object>(mesh, material);
 
 	return true;
 }
@@ -137,31 +137,31 @@ void BlinnPhong::Update() {
 	perFrame.useTexture = useTexture;
 
 	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	context->Map(perFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
-	context->Unmap(perFrameBuffer, 0);
+	context->Unmap(perFrameBuffer.Get(), 0);
 }
 
 void BlinnPhong::Render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	context->ClearRenderTargetView(rtv, clear_color);
-	context->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	context->ClearRenderTargetView(rtv.Get(), clear_color);
+	context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	context->RSSetViewports(1, &viewport);
-	context->OMSetRenderTargets(1, &rtv, dsv);
+	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
-	context->VSSetConstantBuffers(0, 1, &perObjectBuffer);
+	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
+	context->VSSetConstantBuffers(0, 1, &constant_buffers[0]);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
 
 	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-	object->Render(*context, perObjectBuffer, proj * view);
+	object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

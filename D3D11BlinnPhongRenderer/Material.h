@@ -1,6 +1,9 @@
 #pragma once
+#include <wrl.h>
 #include <glm/glm.hpp>
 #include "Shader.h"
+
+using Microsoft::WRL::ComPtr;
 
 class Material {
 public:
@@ -14,19 +17,19 @@ public:
 	};
 
 public:
-	Material(ID3D11Device &device, const Data &data, const Shader &shader, const std::string &texturePath);
+	Material(ID3D11Device *device, std::shared_ptr<Data> data, std::shared_ptr<Shader> shader, const std::string &texturePath);
 
 	const Data &GetData() const { return *data; }
 
-	void Bind(ID3D11DeviceContext &context) const;
+	void Bind(ID3D11DeviceContext *context) const;
 
 private:
-	void CreateTexture(ID3D11Device &device, const std::string &fileName);
-	void CreateSamplerState(ID3D11Device &device);
+	void CreateTexture(ID3D11Device *device, const std::string &fileName);
+	void CreateSamplerState(ID3D11Device *device);
 
 private:
-	const Data *data = nullptr;
-	const Shader *shader = nullptr;
-	ID3D11ShaderResourceView *srv = nullptr;
-	ID3D11SamplerState *samplerState = nullptr;
+	const std::shared_ptr<Data> data;
+	const std::shared_ptr<Shader> shader;
+	ComPtr<ID3D11ShaderResourceView> srv;
+	ComPtr<ID3D11SamplerState> samplerState;
 };

@@ -1,10 +1,13 @@
 #pragma once
 #include "App.h"
+#include <wrl.h>
 #include <glm/glm.hpp>
 #include "Camera.h"
 #include "Light.h"
 #include "Object.h"
 #include "Material.h"
+
+using Microsoft::WRL::ComPtr;
 
 class BlinnPhong : public App {
 public:
@@ -21,14 +24,14 @@ private:
 		int useTexture;
 	};
 
-	ID3D11Buffer *perObjectBuffer = nullptr;
-	ID3D11Buffer *perFrameBuffer = nullptr;
+	ComPtr<ID3D11Buffer> perObjectBuffer;
+	ComPtr<ID3D11Buffer> perFrameBuffer;
 
 	bool useTexture = false;
 
-	Camera *camera = nullptr;
-	Light *light = nullptr;
-	Object *object = nullptr;
-	Material::Data *materialData = nullptr;
+	std::unique_ptr<Camera> camera;
+	std::unique_ptr<Light> light;
+	std::unique_ptr<Object> object;
+	std::shared_ptr<Material::Data> materialData;
 };
 

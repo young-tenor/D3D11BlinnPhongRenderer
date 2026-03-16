@@ -1,9 +1,13 @@
 #pragma once
 #include "App.h"
+#include <wrl.h>
 #include <glm/glm.hpp>
 #include "Camera.h"
 #include "Light.h"
 #include "Object.h"
+
+using Microsoft::WRL::ComPtr;
+
 
 class Billboard : public App {
 public:
@@ -20,11 +24,11 @@ private:
 		float padding;
 	};
 
-	ID3D11Buffer *perObjectBuffer = nullptr;
-	ID3D11Buffer *perFrameBuffer = nullptr;
+	ComPtr<ID3D11Buffer> perObjectBuffer;
+	ComPtr<ID3D11Buffer> perFrameBuffer;
 
-	Camera *camera = nullptr;
-	Object *object = nullptr;
-	Object *floor = nullptr;
+	std::unique_ptr<Camera> camera;
+	std::unique_ptr<Object> object;
+	//std::unique_ptr<Object> floor;
 };
 

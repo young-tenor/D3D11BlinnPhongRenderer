@@ -40,24 +40,24 @@ bool Billboard::Init(HWND hWnd) {
 		return false;
 	}
 
-	camera = new Camera(hWnd);
+	camera = std::make_unique<Camera>(hWnd);
 
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	auto [vertices, indices] = MeshGenerator::GeneratePoint();
-	auto point = new Mesh(*device, vertices, indices);
+	auto point = std::make_shared<Mesh>(device.Get(), vertices, indices);
 
-	auto shader = new Shader(*device, L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
 
-	auto treeMatData = new Material::Data();
+	auto treeMatData = std::make_shared<Material::Data>();
 	treeMatData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
 	treeMatData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
 	treeMatData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
 	treeMatData->shininess = 32.0f;
-	auto treeMat = new Material(*device, *treeMatData, *shader, "tree.png");
+	auto treeMat = std::make_shared<Material>(device.Get(), treeMatData, shader, "tree.png");
 
-	object = new Object(*point, *treeMat);
+	object = std::make_unique<Object>(point, treeMat);
 
 	//floor = new Mesh();
 	//MeshGenerator::GenerateSquare(*floor);
@@ -84,30 +84,30 @@ void Billboard::Update() {
 	perFrame.eyePos = camera->GetPos();
 
 	D3D11_MAPPED_SUBRESOURCE resource;
-	context->Map(perFrameBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	context->Map(perFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	memcpy(resource.pData, &perFrame, sizeof(PerFrame));
-	context->Unmap(perFrameBuffer, 0);
+	context->Unmap(perFrameBuffer.Get(), 0);
 }
 
 void Billboard::Render() {
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	context->ClearRenderTargetView(rtv, clear_color);
-	context->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	context->ClearRenderTargetView(rtv.Get(), clear_color);
+	context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	context->RSSetViewports(1, &viewport);
-	context->OMSetRenderTargets(1, &rtv, dsv);
+	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-	ID3D11Buffer *constant_buffers[] = { perObjectBuffer, perFrameBuffer };
+	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get()};
 	context->GSSetConstantBuffers(0, 2, constant_buffers);
 
 	const auto view = camera->GetView();
 	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-	object->Render(*context, perObjectBuffer, proj * view);
+	object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

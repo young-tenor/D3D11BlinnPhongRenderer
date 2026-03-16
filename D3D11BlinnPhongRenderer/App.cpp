@@ -57,16 +57,16 @@ bool App::Init(HWND hWnd) {
 		swapChainDesc.SampleDesc.Quality = 0;
 	}
 
-	IDXGIDevice *dxgiDevice = nullptr;
-	device->QueryInterface(__uuidof(IDXGIDevice), (void **)&dxgiDevice);
+	ComPtr<IDXGIDevice> dxgiDevice;
+	device.As(&dxgiDevice);
 
-	IDXGIAdapter *dxgiAdapter = nullptr;
+	ComPtr<IDXGIAdapter> dxgiAdapter;
 	dxgiDevice->GetAdapter(&dxgiAdapter);
 
-	IDXGIFactory *dxgiFactory = nullptr;
-	dxgiAdapter->GetParent(__uuidof(IDXGIFactory), (void **)&dxgiFactory);
+	ComPtr<IDXGIFactory> dxgiFactory;
+	dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
 
-	hr = dxgiFactory->CreateSwapChain(device, &swapChainDesc, &swapChain);
+	hr = dxgiFactory->CreateSwapChain(device.Get(), &swapChainDesc, &swapChain);
 	if (FAILED(hr)) {
 		std::cout << "CreateSwapChain() failed." << std::endl;
 		return false;
@@ -81,22 +81,21 @@ bool App::Init(HWND hWnd) {
 	viewport.TopLeftY = 0;
 
 	// render target view
-	ID3D11Texture2D *backBuffer = nullptr;
-	hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void **)&backBuffer);
+	ComPtr<ID3D11Texture2D> backBuffer;
+	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
 	if (FAILED(hr)) {
 		std::cout << "GetBuffer() failed." << std::endl;
 		return false;
 	}
 
-	hr = device->CreateRenderTargetView(backBuffer, nullptr, &rtv);
+	hr = device->CreateRenderTargetView(backBuffer.Get(), nullptr, &rtv);
 	if (FAILED(hr)) {
 		std::cout << "CreateRenderTargetView() failed." << std::endl;
 		return false;
 	}
-	backBuffer->Release();
 
 	// depth stencil view
-	ID3D11Texture2D *depthBuffer = nullptr;
+	ComPtr<ID3D11Texture2D> depthBuffer;
 	D3D11_TEXTURE2D_DESC depthBufferDesc = { };
 	depthBufferDesc.Width = width;
 	depthBufferDesc.Height = height;
@@ -108,8 +107,7 @@ bool App::Init(HWND hWnd) {
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	device->CreateTexture2D(&depthBufferDesc, nullptr, &depthBuffer);
-	device->CreateDepthStencilView(depthBuffer, nullptr, &dsv);
-	depthBuffer->Release();
+	device->CreateDepthStencilView(depthBuffer.Get(), nullptr, &dsv);
 
 	// GUI
 	IMGUI_CHECKVERSION();
@@ -120,7 +118,7 @@ bool App::Init(HWND hWnd) {
 	ImGui::StyleColorsLight();
 
 	ImGui_ImplWin32_Init(hWnd);
-	ImGui_ImplDX11_Init(device, context);
+	ImGui_ImplDX11_Init(device.Get(), context.Get());
 
 	return true;
 }
