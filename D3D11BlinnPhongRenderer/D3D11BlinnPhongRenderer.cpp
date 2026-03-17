@@ -23,11 +23,11 @@ int main() {
 		return -1;
 	}
 
-	const auto blinnPhong = new BlinnPhong();
-	const auto billboard = new Billboard();
-	const auto tessellation = new Tessellation();
+	std::unique_ptr<App> app;
 
-	App *app = tessellation;
+	//app = std::make_unique<BlinnPhong>();
+	//app = std::make_unique<Billboard>();
+	app = std::make_unique<Tessellation>();
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
