@@ -37,8 +37,8 @@ bool BlinnPhong::Init(HWND hWnd) {
 
 	light = std::make_unique<Light>();
 
-	auto [vertices, indices] = MeshGenerator::GenerateSphere();
-	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices);
+	auto [vertices, indices, topology] = MeshGenerator::GenerateSphere();
+	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
 	auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
 
@@ -151,8 +151,6 @@ void BlinnPhong::Render() {
 	context->RSSetViewports(1, &viewport);
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
 	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };

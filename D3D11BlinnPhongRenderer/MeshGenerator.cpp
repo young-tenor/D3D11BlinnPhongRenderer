@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "MeshGenerator.h"
 
-std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GeneratePoint() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GeneratePoint() {
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -10,10 +10,10 @@ std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GeneratePoint()
 
     indices.push_back(0);
 
-    return { vertices, indices };
+    return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST };
 }
 
-std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateSquare() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSquare() {
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -41,10 +41,10 @@ std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateSquare(
     indices.push_back(2);
     indices.push_back(3);
 
-    return { vertices, indices };
+    return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 }
 
-std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateCube() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCube() {
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -157,11 +157,11 @@ std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateCube() 
         indices.push_back(offset + 3);
     }
 
-    return { vertices, indices };
+    return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 }
 
 // https://www.songho.ca/opengl/gl_sphere.html
-std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateSphere(const float radius, const int sectorCount, const int stackCount) {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSphere(const float radius, const int sectorCount, const int stackCount) {
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -210,5 +210,5 @@ std::pair<std::vector<Vertex>, std::vector<UINT>> MeshGenerator::GenerateSphere(
         }
     }
 
-    return { vertices, indices };
+    return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 }

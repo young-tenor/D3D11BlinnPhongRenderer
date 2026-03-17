@@ -3,8 +3,8 @@
 
 class MeshGenerator {
 public:
-    static std::pair<std::vector<Vertex>, std::vector<UINT>> GeneratePoint();
-    static std::pair<std::vector<Vertex>, std::vector<UINT>> GenerateSquare();
-    static std::pair<std::vector<Vertex>, std::vector<UINT>> GenerateCube();
-    static std::pair<std::vector<Vertex>, std::vector<UINT>> GenerateSphere(const float radius = 0.5f, const int sectorCount = 64, const int stackCount = 64);
+    static std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> GeneratePoint();
+    static std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> GenerateSquare();
+    static std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> GenerateCube();
+    static std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> GenerateSphere(const float radius = 0.5f, const int sectorCount = 64, const int stackCount = 64);
 };

@@ -8,7 +8,7 @@ using Microsoft::WRL::ComPtr;
 class Mesh {
 public:
 public:
-	Mesh(ID3D11Device *device, const std::vector<Vertex> &vertices, const std::vector<UINT> &indices);
+	Mesh(ID3D11Device *device, const std::vector<Vertex> &vertices, const std::vector<UINT> &indices, D3D11_PRIMITIVE_TOPOLOGY topology);
 
 	const UINT GetIndexCount() const { return indices.size(); }
 
@@ -24,4 +24,5 @@ private:
 
 	ComPtr<ID3D11Buffer> vertexBuffer = nullptr;
 	ComPtr<ID3D11Buffer> indexBuffer = nullptr;
+	D3D11_PRIMITIVE_TOPOLOGY topology;
 };

@@ -2,7 +2,10 @@
 #include "Mesh.h"
 #include "Vertex.h"
 
-Mesh::Mesh(ID3D11Device *device, const std::vector<Vertex> &vertices, const std::vector<UINT> &indices) : vertices(vertices), indices(indices) {
+Mesh::Mesh(ID3D11Device *device, const std::vector<Vertex> &vertices, const std::vector<UINT> &indices, D3D11_PRIMITIVE_TOPOLOGY topology) :
+	vertices(vertices), 
+	indices(indices),
+	topology(topology) {
 	CreateVertexBuffer(device);
 	CreateIndexBuffer(device);
 }
@@ -12,6 +15,7 @@ void Mesh::Bind(ID3D11DeviceContext *context) const {
 	UINT offset = 0;
 	context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
 	context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	context->IASetPrimitiveTopology(topology);
 }
 
 void Mesh::CreateVertexBuffer(ID3D11Device *device) {

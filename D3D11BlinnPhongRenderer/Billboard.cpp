@@ -47,8 +47,8 @@ bool Billboard::Init(HWND hWnd) {
 
 	// tree
 	{
-		auto [vertices, indices] = MeshGenerator::GeneratePoint();
-		auto point = std::make_shared<Mesh>(device.Get(), vertices, indices);
+		auto [vertices, indices, topology] = MeshGenerator::GeneratePoint();
+		auto point = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
 		auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
 

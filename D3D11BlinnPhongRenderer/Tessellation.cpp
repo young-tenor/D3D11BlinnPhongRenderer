@@ -44,8 +44,8 @@ bool Tessellation::Init(HWND hWnd) {
 
 	light = std::make_unique<Light>();
 
-	auto [vertices, indices] = MeshGenerator::GenerateSphere(0.5f, 16, 16);
-	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices);
+	auto [vertices, indices, topology] = MeshGenerator::GenerateSphere(0.5f, 16, 16);
+	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
 	auto shader = std::make_shared<Shader>(device.Get(), L"TessellationVS.hlsl", L"", L"TessellationPS.hlsl");
 
