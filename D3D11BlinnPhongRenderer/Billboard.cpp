@@ -45,37 +45,34 @@ bool Billboard::Init(HWND hWnd) {
 	Vertex vertex;
 	vertex.pos = glm::vec3(0.0f, 0.0f, 0.0f);
 
-	// tree
-	{
-		auto [vertices, indices, topology] = MeshGenerator::GeneratePoint();
-		auto point = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
+	auto [vertices, indices, topology] = MeshGenerator::GeneratePoint();
+	auto point = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
-		auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
 
-		auto materialData = std::make_shared<Material::Data>();
-		materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-		materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
-		materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
-		materialData->shininess = 32.0f;
+	auto materialData = std::make_shared<Material::Data>();
+	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+	materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
+	materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
+	materialData->shininess = 32.0f;
 
-		auto material = std::make_shared<Material>(device.Get(), materialData, shader, "tree.png");
+	auto material = std::make_shared<Material>(device.Get(), materialData, shader, "tree.png");
 
-		for (int i = 0; i < 20; i++) {
-			auto tree1 = std::make_unique<Object>(point, material);
-			auto tree2 = std::make_unique<Object>(point, material);
+	for (int i = 0; i < 20; i++) {
+		auto tree1 = std::make_unique<Object>(point, material);
+		auto tree2 = std::make_unique<Object>(point, material);
 
-			auto scale = glm::vec3(2.0f, 2.0f, 2.0f);
-			tree1->SetScale(scale);
-			tree2->SetScale(scale);
+		auto scale = glm::vec3(2.0f, 2.0f, 2.0f);
+		tree1->SetScale(scale);
+		tree2->SetScale(scale);
 
-			auto translation1 = glm::vec3(-2.5f, 0.0f, -10.0f + (float)i * 2.0f);
-			auto translation2 = glm::vec3(2.5f, 0.0f, -10.0f + (float)i * 2.0f);
-			tree1->SetTranslation(translation1);
-			tree2->SetTranslation(translation2);
+		auto translation1 = glm::vec3(-2.5f, 0.0f, -10.0f + (float)i * 2.0f);
+		auto translation2 = glm::vec3(2.5f, 0.0f, -10.0f + (float)i * 2.0f);
+		tree1->SetTranslation(translation1);
+		tree2->SetTranslation(translation2);
 
-			trees.push_back(std::move(tree1));
-			trees.push_back(std::move(tree2));
-		}
+		trees.push_back(std::move(tree1));
+		trees.push_back(std::move(tree2));
 	}
 
 	return true;

@@ -26,8 +26,8 @@ int main() {
 	std::unique_ptr<App> app;
 
 	//app = std::make_unique<BlinnPhong>();
-	//app = std::make_unique<Billboard>();
-	app = std::make_unique<Tessellation>();
+	app = std::make_unique<Billboard>();
+	//app = std::make_unique<Tessellation>();
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;
