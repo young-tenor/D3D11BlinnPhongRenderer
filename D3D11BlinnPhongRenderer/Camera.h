@@ -23,7 +23,7 @@ private:
     UINT width = 1280;
     UINT height = 720;
 
-    float dist = 3.0f;
+    float dist = 5.0f;
     float yaw = 0.0f;
     float pitch = 0.0f;
     glm::vec3 pos = glm::vec3(0.0f, 0.0f, -3.0f);
