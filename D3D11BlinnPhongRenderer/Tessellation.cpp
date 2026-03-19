@@ -44,10 +44,10 @@ bool Tessellation::Init(HWND hWnd) {
 
 	light = std::make_unique<Light>();
 
-	auto [vertices, indices, topology] = MeshGenerator::GenerateCubeSphere(1.0f, 64);
+	auto [vertices, indices, topology] = MeshGenerator::GenerateCubeSphere();
 	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
-	auto shader = std::make_shared<Shader>(device.Get(), L"TessellationVS.hlsl", L"", L"TessellationPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"TessellationVS.hlsl", L"TessellationHS.hlsl", L"TessellationDS.hlsl", L"", L"TessellationPS.hlsl");
 
 	auto materialData = std::make_shared<Material::Data>();
 	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
@@ -105,6 +105,8 @@ void Tessellation::Render() {
 
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
 	context->VSSetConstantBuffers(0, 2, constant_buffers);
+	context->HSSetConstantBuffers(0, 2, constant_buffers);
+	context->DSSetConstantBuffers(0, 2, constant_buffers);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
 
 	if (drawWireFrame) {

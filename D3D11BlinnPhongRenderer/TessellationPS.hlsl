@@ -4,7 +4,6 @@ struct PSInput {
     float4 pos : SV_POSITION;
     float3 posWorld : POSITION;
     float3 normal : NORMAL;
-    float2 texcoord : TEXCOORD;
 };
 
 Texture2D g_texture : register(t0);

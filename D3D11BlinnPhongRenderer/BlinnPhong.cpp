@@ -40,7 +40,7 @@ bool BlinnPhong::Init(HWND hWnd) {
 	auto [vertices, indices, topology] = MeshGenerator::GenerateSphere();
 	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
-	auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"BlinnPhongPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"BlinnPhongVS.hlsl", L"", L"", L"", L"BlinnPhongPS.hlsl");
 
 	materialData = std::make_shared<Material::Data>();
 	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);

@@ -48,7 +48,7 @@ bool Billboard::Init(HWND hWnd) {
 	auto [vertices, indices, topology] = MeshGenerator::GeneratePoint();
 	auto point = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
-	auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
+	auto shader = std::make_shared<Shader>(device.Get(), L"BillboardVS.hlsl", L"", L"", L"BillboardGS.hlsl", L"BillboardPS.hlsl");
 
 	auto materialData = std::make_shared<Material::Data>();
 	materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
