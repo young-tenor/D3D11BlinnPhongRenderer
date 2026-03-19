@@ -129,4 +129,9 @@
       <Filter>Shader Files\Tessellation</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Common.hlsli">
+      <Filter>Shader Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

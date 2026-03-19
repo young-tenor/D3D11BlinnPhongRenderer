@@ -11,7 +11,7 @@ public:
 	void SetRotation(glm::vec3 &rotation) { this->rotation = rotation; }
 	void SetTranslation(glm::vec3 &translation) { this->translation = translation; }
 
-	void Render(ID3D11DeviceContext *context, ID3D11Buffer *perObjectBuffer, const glm::mat4 &viewProj) const;
+	void Render(ID3D11DeviceContext *context, ID3D11Buffer *perObjectBuffer) const;
 
 private:
 	std::shared_ptr<Mesh> mesh;

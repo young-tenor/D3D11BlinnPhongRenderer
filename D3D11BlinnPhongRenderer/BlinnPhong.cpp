@@ -131,7 +131,11 @@ void BlinnPhong::Update() {
 	ImGui::End();
 
 	// per frame
+	const auto view = camera->GetView();
+	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
 	PerFrame perFrame;
+	perFrame.viewProj = glm::transpose(proj * view);
 	perFrame.light = *light;
 	perFrame.eyePos = camera->GetPos();
 	perFrame.useTexture = useTexture;
@@ -151,15 +155,11 @@ void BlinnPhong::Render() {
 	context->RSSetViewports(1, &viewport);
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
-	context->VSSetConstantBuffers(0, 1, &constant_buffers[0]);
+	context->VSSetConstantBuffers(0, 2, constant_buffers);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
-
-	const auto view = camera->GetView();
-	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-	object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+	
+	object->Render(context.Get(), perObjectBuffer.Get());
 
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

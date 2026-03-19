@@ -16,6 +16,7 @@ public:
 
 private:
 	struct PerFrame {
+		glm::mat4 viewProj;
 		Light light;
 		glm::vec3 eyePos;
 		float padding;

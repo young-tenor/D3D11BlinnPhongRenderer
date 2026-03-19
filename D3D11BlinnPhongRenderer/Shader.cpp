@@ -18,7 +18,7 @@ void Shader::Bind(ID3D11DeviceContext *context) const {
 
 void Shader::CreateGeometryShader(ID3D11Device *device, const std::wstring &gsPath) {
 	ID3DBlob *blob = nullptr;
-	HRESULT hr = D3DCompileFromFile(gsPath.c_str(), nullptr, nullptr, "main", "gs_5_0", 0, 0, &blob, nullptr);
+	HRESULT hr = D3DCompileFromFile(gsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "gs_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: geometry shader");
 	device->CreateGeometryShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &gs);
 	blob->Release();
@@ -26,7 +26,7 @@ void Shader::CreateGeometryShader(ID3D11Device *device, const std::wstring &gsPa
 
 void Shader::CreateVertexShaderAndInputLayout(ID3D11Device *device, const std::wstring &vsPath) {
 	ID3DBlob *blob = nullptr;
-	HRESULT	hr = D3DCompileFromFile(vsPath.c_str(), nullptr, nullptr, "main", "vs_5_0", 0, 0, &blob, nullptr);
+	HRESULT	hr = D3DCompileFromFile(vsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "vs_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: vertex shader");
 	device->CreateVertexShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &vs);
 
@@ -42,7 +42,7 @@ void Shader::CreateVertexShaderAndInputLayout(ID3D11Device *device, const std::w
 
 void Shader::CreatePixelShader(ID3D11Device *device, const std::wstring &psPath) {
 	ID3DBlob *blob = nullptr;
-	HRESULT hr = D3DCompileFromFile(psPath.c_str(), nullptr, nullptr, "main", "ps_5_0", 0, 0, &blob, nullptr);
+	HRESULT hr = D3DCompileFromFile(psPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "ps_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: pixel shader");
 	device->CreatePixelShader(blob->GetBufferPointer(), blob->GetBufferSize(), nullptr, &ps);
 	blob->Release();

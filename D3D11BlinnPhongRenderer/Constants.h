@@ -4,7 +4,6 @@
 
 struct PerObject {
 	glm::mat4 model;
-	glm::mat4 viewProj;
 	glm::mat4 modelInvTr;
 
 	Material::Data material;

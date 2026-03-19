@@ -94,7 +94,11 @@ void Billboard::Update() {
 	ImGui::End();
 
 	// per frame
+	const auto view = camera->GetView();
+	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
+
 	PerFrame perFrame;
+	perFrame.viewProj = glm::transpose(proj * view);
 	perFrame.eyePos = camera->GetPos();
 
 	D3D11_MAPPED_SUBRESOURCE resource;
@@ -112,20 +116,13 @@ void Billboard::Render() {
 	context->RSSetViewports(1, &viewport);
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get()};
 	context->VSSetConstantBuffers(0, 2, constant_buffers);
 	context->GSSetConstantBuffers(0, 2, constant_buffers);
 	context->PSSetConstantBuffers(0, 2, constant_buffers);
 
-	const auto view = camera->GetView();
-	const auto proj = glm::perspectiveLH_ZO(glm::radians(45.0f), aspect, 0.1f, 100.0f);
-
 	for (auto &object : trees) {
-		object->Render(context.Get(), perObjectBuffer.Get(), proj * view);
+		object->Render(context.Get(), perObjectBuffer.Get());
 	}
 
 	ImGui::Render();

@@ -1,18 +1,4 @@
-struct Material {
-    float3 ambient;
-    float shininess;
-    float3 diffuse;
-    float padding1;
-    float3 specular;
-    float padding2;
-};
-
-cbuffer PerObject : register(b0) {
-    matrix model;
-    matrix viewProj;
-    matrix modelInvTr;
-    Material material;
-}
+#include "Common.hlsli"
 
 struct VSInput {
     float3 pos : POSITION;
