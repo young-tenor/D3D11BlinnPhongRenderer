@@ -19,7 +19,7 @@ private:
 		glm::mat4 viewProj;
 		Light light;
 		glm::vec3 eyePos;
-		float padding;
+		int tess;
 	};
 
 	ComPtr<ID3D11RasterizerState> wireframeRasterizerState;
@@ -27,9 +27,7 @@ private:
 	ComPtr<ID3D11Buffer> perObjectBuffer;
 	ComPtr<ID3D11Buffer> perFrameBuffer;
 
-	//ID3D11SamplerState *samplerState = nullptr;
-	//ID3D11ShaderResourceView *srv = nullptr;
-
+	int subdivision = 16;
 	bool drawWireFrame = false;
 
 	std::unique_ptr<Camera> camera;

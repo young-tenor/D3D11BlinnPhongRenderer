@@ -75,6 +75,8 @@ void Tessellation::Update() {
 
 	ImGui::Begin("Tessellation");
 
+	ImGui::SliderInt("subdivision", &subdivision, 0, 63);
+
 	ImGui::Checkbox("draw wireframe", &drawWireFrame);
 
 	ImGui::End();
@@ -87,6 +89,7 @@ void Tessellation::Update() {
 	perFrame.viewProj = glm::transpose(proj * view);
 	perFrame.light = *light;
 	perFrame.eyePos = camera->GetPos();
+	perFrame.tess = subdivision + 1;
 
 	D3D11_MAPPED_SUBRESOURCE resource;
 	context->Map(perFrameBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);

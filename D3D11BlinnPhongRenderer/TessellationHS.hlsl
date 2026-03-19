@@ -1,3 +1,5 @@
+#include "Common.hlsli"
+
 struct VSOutput {
     float3 pos : POSITION;
     float3 normal : NORMAL;
@@ -13,11 +15,9 @@ struct HSConstOutput {
 };
 
 HSConstOutput PatchConstFunc(InputPatch<VSOutput, 4> patch, uint patchId : SV_PrimitiveID) {
-    float tess = 16.0f;
-    
     HSConstOutput output;
-    output.edges[0] = output.edges[1] = output.edges[2] = output.edges[3] = tess;
-    output.inside[0] = output.inside[1] = tess;
+    output.edges[0] = output.edges[1] = output.edges[2] = output.edges[3] = useTexture;
+    output.inside[0] = output.inside[1] = useTexture;
     return output;
 }
 
