@@ -44,7 +44,7 @@ bool Tessellation::Init(HWND hWnd) {
 
 	light = std::make_unique<Light>();
 
-	auto [vertices, indices, topology] = MeshGenerator::GenerateSphere(1.0f, 16, 16);
+	auto [vertices, indices, topology] = MeshGenerator::GenerateCubeSphere(1.0f, 64);
 	auto mesh = std::make_shared<Mesh>(device.Get(), vertices, indices, topology);
 
 	auto shader = std::make_shared<Shader>(device.Get(), L"TessellationVS.hlsl", L"", L"TessellationPS.hlsl");
@@ -98,10 +98,6 @@ void Tessellation::Render() {
 
 	context->RSSetViewports(1, &viewport);
 	context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
-
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-	context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
 	context->VSSetConstantBuffers(0, 1, &constant_buffers[0]);

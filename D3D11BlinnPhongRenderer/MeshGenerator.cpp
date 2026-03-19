@@ -169,12 +169,12 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     const float stackStep = glm::pi<float>() / stackCount;
 
     for (int i = 0; i <= stackCount; i++) {
-        float stackAngle = glm::pi<float>() / 2 - i * stackStep;
-        float xz = radius * glm::cos(stackAngle);
-        float y = radius * glm::sin(stackAngle);
+        const float stackAngle = glm::pi<float>() / 2 - i * stackStep;
+        const float xz = radius * glm::cos(stackAngle);
+        const float y = radius * glm::sin(stackAngle);
 
         for (int j = 0; j <= sectorCount; j++) {
-            float sectorAngle = j * sectorStep;
+            const float sectorAngle = j * sectorStep;
 
             Vertex vertex;
 
@@ -193,7 +193,7 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
 
     for (int i = 0; i < stackCount; i++) {
         int k1 = i * (sectorCount + 1);
-        int k2 = k1 + sectorCount + 1;
+        int k2 = k1 + (sectorCount + 1);
 
         for (int j = 0; j < sectorCount; j++, k1++, k2++) {
             if (i != 0) {
@@ -211,4 +211,55 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     }
 
     return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
+}
+
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCubeSphere(const float radius, int subdivision) {
+    std::vector<Vertex> vertices;
+    std::vector<UINT> indices;
+
+    const glm::vec3 normals[6] = {
+        { 0, 0, 1 },
+        { 0, 0, -1 },
+        { 0, 1, 0 },
+        { 0, -1, 0 },
+        { -1, 0, 0 },
+        { 1, 0, 0 }
+    };
+
+    for (auto &normal : normals) {
+        const glm::vec3 axisA = { normal.y, normal.z, normal.x };
+        const glm::vec3 axisB = glm::cross(normal, axisA);
+
+        for (int i = 0; i <= subdivision; i++) {
+            for (int j = 0; j <= subdivision; j++) {
+                const auto percent = glm::vec2(j, i) / (float)subdivision;
+
+                auto pos = normal + (percent.x * 2.0f - 1.0f) * axisA + (percent.y * 2.0f - 1.0f) * axisB;
+                pos = glm::normalize(pos);
+
+                Vertex v;
+                v.pos = pos * radius;
+                v.normal = pos;
+                v.texcoord = percent;
+                vertices.push_back(v);
+            }
+        }
+    }
+
+    for (int k = 0; k < 6; k++) {
+        for (int i = 0; i < subdivision; i++) {
+            int k1 = k * (subdivision + 1) * (subdivision + 1) + i * (subdivision + 1);
+            int k2 = k1 + (subdivision + 1);
+
+            for (int j = 0; j < subdivision; j++, k1++, k2++) {
+                indices.push_back(k1);
+                indices.push_back(k1 + 1);
+                indices.push_back(k2 + 1);
+                indices.push_back(k2);
+            }
+        }
+    }
+
+    //return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST };
+    return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST };
 }
