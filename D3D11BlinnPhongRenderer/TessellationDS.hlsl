@@ -1,5 +1,12 @@
 #include "Common.hlsli"
 
+cbuffer PerFrame : register(b1) {
+    matrix viewProj;
+    Light light;
+    float3 eyePos;
+    int tess;
+}
+
 struct HSOutput {
     float3 pos : POSITION;
 };

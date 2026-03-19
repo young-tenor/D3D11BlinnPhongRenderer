@@ -32,11 +32,12 @@ cbuffer PerObject : register(b0) {
     Material material;
 }
 
-cbuffer PerFrame : register(b1) {
-    matrix viewProj;
-    Light light;
-    float3 eyePos;
-    int useTexture;
+// https://en.wikipedia.org/wiki/Blinn%E2%80%93Phong_reflection_model
+float3 BlinnPhong(float3 normal, float3 lightVec, float3 lightStrength, float3 toEye) {
+    float3 halfway = normalize(lightVec + toEye);
+    float3 specular = material.specular * pow(max(dot(normal, halfway), 0.0f), material.shininess);
+    
+    return (material.diffuse + specular) * lightStrength;
 }
 
 #endif

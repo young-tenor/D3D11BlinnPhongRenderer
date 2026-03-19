@@ -4,12 +4,12 @@ struct VSInput {
     float2 texcoord : TEXCOORD;
 };
 
-struct GSInput {
+struct VSOutput {
     float4 pos : POSITION;
 };
 
-GSInput main(VSInput input) {
-    GSInput output;
+VSOutput main(VSInput input) {
+    VSOutput output;
     output.pos = float4(input.pos, 1.0f);
     return output;
 }
