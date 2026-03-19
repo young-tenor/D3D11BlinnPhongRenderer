@@ -19,10 +19,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
 
     vertices.resize(4);
 
-    vertices[0].pos = glm::vec3(-0.5f, 0.5f, 0.0f);
-    vertices[1].pos = glm::vec3(0.5f, 0.5f, 0.0f);
-    vertices[2].pos = glm::vec3(0.5f, -0.5f, 0.0f);
-    vertices[3].pos = glm::vec3(-0.5f, -0.5f, 0.0f);
+    vertices[0].pos = glm::vec3(-1.0f, 1.0f, 0.0f);
+    vertices[1].pos = glm::vec3(1.0f, 1.0f, 0.0f);
+    vertices[2].pos = glm::vec3(1.0f, -1.0f, 0.0f);
+    vertices[3].pos = glm::vec3(-1.0f, -1.0f, 0.0f);
 
     vertices[0].normal = glm::vec3(0.0f, 0.0f, -1.0f);
     vertices[1].normal = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -51,10 +51,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices.resize(24);
 
     // front
-    vertices[0].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
-    vertices[1].pos = glm::vec3(0.5f, 0.5f, -0.5f);
-    vertices[2].pos = glm::vec3(0.5f, -0.5f, -0.5f);
-    vertices[3].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
+    vertices[0].pos = glm::vec3(-1.0f, 1.0f, -1.0f);
+    vertices[1].pos = glm::vec3(1.0f, 1.0f, -1.0f);
+    vertices[2].pos = glm::vec3(1.0f, -1.0f, -1.0f);
+    vertices[3].pos = glm::vec3(-1.0f, -1.0f, -1.0f);
 
     vertices[0].normal = glm::vec3(0.0f, 0.0f, -1.0f);
     vertices[1].normal = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -67,10 +67,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices[3].texcoord = glm::vec2(0.0f, 1.0f);
 
     // back
-    vertices[4].pos = glm::vec3(0.5f, 0.5f, 0.5f);
-    vertices[5].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
-    vertices[6].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
-    vertices[7].pos = glm::vec3(0.5f, -0.5f, 0.5f);
+    vertices[4].pos = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[5].pos = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[6].pos = glm::vec3(-1.0f, -1.0f, 1.0f);
+    vertices[7].pos = glm::vec3(1.0f, -1.0f, 1.0f);
 
     vertices[4].normal = glm::vec3(0.0f, 0.0f, 1.0f);
     vertices[5].normal = glm::vec3(0.0f, 0.0f, 1.0f);
@@ -83,10 +83,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices[7].texcoord = glm::vec2(0.0f, 1.0f);
 
     // top
-    vertices[8].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
-    vertices[9].pos = glm::vec3(0.5f, 0.5f, 0.5f);
-    vertices[10].pos = glm::vec3(0.5f, 0.5f, -0.5f);
-    vertices[11].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
+    vertices[8].pos = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[9].pos = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[10].pos = glm::vec3(1.0f, 1.0f, -1.0f);
+    vertices[11].pos = glm::vec3(-1.0f, 1.0f, -1.0f);
 
     vertices[8].normal = glm::vec3(0.0f, 1.0f, 0.0f);
     vertices[9].normal = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -99,10 +99,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices[11].texcoord = glm::vec2(0.0f, 1.0f);
 
     // bottom
-    vertices[12].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
-    vertices[13].pos = glm::vec3(0.5f, -0.5f, -0.5f);
-    vertices[14].pos = glm::vec3(0.5f, -0.5f, 0.5f);
-    vertices[15].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
+    vertices[12].pos = glm::vec3(-1.0f, -1.0f, -1.0f);
+    vertices[13].pos = glm::vec3(1.0f, -1.0f, -1.0f);
+    vertices[14].pos = glm::vec3(1.0f, -1.0f, 1.0f);
+    vertices[15].pos = glm::vec3(-1.0f, -1.0f, 1.0f);
 
     vertices[12].normal = glm::vec3(0.0f, -1.0f, 0.0f);
     vertices[13].normal = glm::vec3(0.0f, -1.0f, 0.0f);
@@ -115,10 +115,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices[15].texcoord = glm::vec2(0.0f, 1.0f);
 
     // left
-    vertices[16].pos = glm::vec3(-0.5f, 0.5f, 0.5f);
-    vertices[17].pos = glm::vec3(-0.5f, 0.5f, -0.5f);
-    vertices[18].pos = glm::vec3(-0.5f, -0.5f, -0.5f);
-    vertices[19].pos = glm::vec3(-0.5f, -0.5f, 0.5f);
+    vertices[16].pos = glm::vec3(-1.0f, 1.0f, 1.0f);
+    vertices[17].pos = glm::vec3(-1.0f, 1.0f, -1.0f);
+    vertices[18].pos = glm::vec3(-1.0f, -1.0f, -1.0f);
+    vertices[19].pos = glm::vec3(-1.0f, -1.0f, 1.0f);
 
     vertices[16].normal = glm::vec3(-1.0f, 0.0f, 0.0f);
     vertices[17].normal = glm::vec3(-1.0f, 0.0f, 0.0f);
@@ -131,10 +131,10 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     vertices[19].texcoord = glm::vec2(0.0f, 1.0f);
     
     // right
-    vertices[20].pos = glm::vec3(0.5f, 0.5f, -0.5f);
-    vertices[21].pos = glm::vec3(0.5f, 0.5f, 0.5f);
-    vertices[22].pos = glm::vec3(0.5f, -0.5f, 0.5f);
-    vertices[23].pos = glm::vec3(0.5f, -0.5f, -0.5f);
+    vertices[20].pos = glm::vec3(1.0f, 1.0f, -1.0f);
+    vertices[21].pos = glm::vec3(1.0f, 1.0f, 1.0f);
+    vertices[22].pos = glm::vec3(1.0f, -1.0f, 1.0f);
+    vertices[23].pos = glm::vec3(1.0f, -1.0f, -1.0f);
     
     vertices[20].normal = glm::vec3(1.0f, 0.0f, 0.0f);
     vertices[21].normal = glm::vec3(1.0f, 0.0f, 0.0f);

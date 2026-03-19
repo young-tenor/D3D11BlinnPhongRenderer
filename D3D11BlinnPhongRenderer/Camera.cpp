@@ -17,7 +17,7 @@ void Camera::Update() {
 void Camera::UpdateDistance() {
     float wheel = ImGui::GetIO().MouseWheel;
     dist -= wheel;
-    dist = std::clamp(dist, 1.0f, 10.f);
+    dist = std::clamp(dist, 3.0f, 10.f);
 }
 
 void Camera::UpdatePosition() {
