@@ -4,13 +4,49 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-Material::Material(ID3D11Device *device, std::shared_ptr<Data> data, std::shared_ptr<Shader> shader, const std::string &texturePath) :
+Material::Material(
+    ID3D11Device *device,
+    std::shared_ptr<Data> data,
+    std::shared_ptr<Shader> shader,
+    const std::string &texturePath) :
     data(std::move(data)), 
     shader(std::move(shader)) {
     if (!texturePath.empty()) {
         CreateTexture(device, texturePath);
     }
     CreateSamplerState(device);
+}
+
+Material::Material(
+    ID3D11Device *device, 
+    std::shared_ptr<Data> data, 
+    std::shared_ptr<Shader> shader,
+    const std::vector<UINT> &image,
+    const UINT width,
+    const UINT height) :
+    data(std::move(data)),
+    shader(std::move(shader)) {
+    D3D11_TEXTURE2D_DESC textureDesc = { };
+    textureDesc.Width = (UINT)width;
+    textureDesc.Height = (UINT)height;
+    textureDesc.MipLevels = 1;
+    textureDesc.ArraySize = 1;
+    textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+    textureDesc.SampleDesc.Count = 1;
+    textureDesc.Usage = D3D11_USAGE_DEFAULT;
+    textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+    D3D11_SUBRESOURCE_DATA initialData = { };
+    initialData.pSysMem = image.data();
+    initialData.SysMemPitch = width * sizeof(UINT);
+
+    ID3D11Texture2D *texture2D = nullptr;
+    HRESULT hr = device->CreateTexture2D(&textureDesc, &initialData, &texture2D);
+    assert(SUCCEEDED(hr), "CreateTexture2D() failed.");
+
+    hr = device->CreateShaderResourceView(texture2D, nullptr, &srv);
+    texture2D->Release();
+    assert(SUCCEEDED(hr), "CreateShaderResourceView() failed.");
 }
 
 void Material::Bind(ID3D11DeviceContext *context) const {

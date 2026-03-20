@@ -3,6 +3,7 @@
 #include "BlinnPhong.h"
 #include "Billboard.h"
 #include "Tessellation.h"
+#include "Mipmap.h"
 
 HINSTANCE hInst;
 HWND hWnd;
@@ -27,7 +28,8 @@ int main() {
 
 	//app = std::make_unique<BlinnPhong>();
 	//app = std::make_unique<Billboard>();
-	app = std::make_unique<Tessellation>();
+	//app = std::make_unique<Tessellation>();
+	app = std::make_unique <Mipmap>();
 
 	if (!app->Init(hWnd)) {
 		std::cout << "init() failed." << std::endl;

@@ -11,13 +11,12 @@ Camera::Camera(HWND hWnd) : hWnd(hWnd) {
 void Camera::Update() {
     UpdateDistance();
     UpdatePosition();
-    view = glm::lookAtLH(pos, at, up);
 }
 
 void Camera::UpdateDistance() {
     float wheel = ImGui::GetIO().MouseWheel;
     dist -= wheel;
-    dist = std::clamp(dist, 3.0f, 10.f);
+    dist = std::clamp(dist, 3.0f, 10.0f);
 }
 
 void Camera::UpdatePosition() {

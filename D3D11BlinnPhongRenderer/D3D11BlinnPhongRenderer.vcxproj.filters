@@ -25,6 +25,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{c6b16777-c943-4cf2-a372-afaf77368ec3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader Files\Mipmap">
+      <UniqueIdentifier>{166da910-ae8c-403b-9a38-6802f0ed4b91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="D3D11BlinnPhongRenderer.cpp" />
@@ -60,6 +63,9 @@
     </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Mipmap.cpp">
+      <Filter>App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +111,9 @@
     <ClInclude Include="Vertex.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Mipmap.h">
+      <Filter>App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BillboardGS.hlsl">
@@ -133,6 +142,12 @@
     </FxCompile>
     <FxCompile Include="TessellationDS.hlsl">
       <Filter>Shader Files\Tessellation</Filter>
+    </FxCompile>
+    <FxCompile Include="MipmapVS.hlsl">
+      <Filter>Shader Files\Mipmap</Filter>
+    </FxCompile>
+    <FxCompile Include="MipmapPS.hlsl">
+      <Filter>Shader Files\Mipmap</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

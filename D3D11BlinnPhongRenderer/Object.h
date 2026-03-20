@@ -7,9 +7,9 @@ class Object {
 public:
 	Object(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material);
 
-	void SetScale(glm::vec3 &scale) { this->scale = scale; }
-	void SetRotation(glm::vec3 &rotation) { this->rotation = rotation; }
-	void SetTranslation(glm::vec3 &translation) { this->translation = translation; }
+	void SetScale(const glm::vec3 &scale) { this->scale = scale; }
+	void SetRotation(const glm::vec3 &rotation) { this->rotation = rotation; }
+	void SetTranslation(const glm::vec3 &translation) { this->translation = translation; }
 
 	void Render(ID3D11DeviceContext *context, ID3D11Buffer *perObjectBuffer) const;
 

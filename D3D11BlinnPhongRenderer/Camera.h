@@ -8,7 +8,7 @@ public:
     const UINT GetWidth() const { return width; }
     const UINT GetHeight() const { return height; }
     const glm::vec3 &GetPos() const { return pos; }
-    const glm::mat4 &GetView() const { return view; }
+    const glm::mat4 &GetView() const { return glm::lookAtLH(pos, at, up); }
 
     void SetPitch(const float &pitch) { this->pitch = pitch; }
 
@@ -30,6 +30,4 @@ private:
 
     glm::vec3 at = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-
-    glm::mat4 view = glm::mat4(1.0f);
 };
