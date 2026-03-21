@@ -35,5 +35,6 @@ app = std::make_unique <Mipmap>();
 <img width="1282" height="752" alt="image" src="https://github.com/user-attachments/assets/db0ac400-e648-4152-accd-f46e424e313b" />
 
 ## Credits
-* **Tree Texture**: Created by [TransparentPNG](https://www.transparentpng.com/), licensed under CC BY 4.0.
+* **f-texture**: Provided by [WebGL Fundamentals](https://webglfundamentals.org/), licensed under [BSD 3-Clause License](https://github.com/gfxfundamentals/webgl-fundamentals/blob/master/LICENSE).
 * **Brick Texture**: Provided by [ambientCG](https://ambientcg.com/), licensed under CC0 1.0 Universal.
+* **Tree Texture**: Created by [TransparentPNG](https://www.transparentpng.com/), licensed under CC BY 4.0.
