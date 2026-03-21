@@ -87,17 +87,17 @@
 
 	void Mipmap::Render()
 	{
-		//const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
-		const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		context->ClearRenderTargetView(rtv.Get(), clear_color);
+		//const float clearColor[] = { 0.1f, 0.2f, 0.4f, 1.0f };
+		const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		context->ClearRenderTargetView(rtv.Get(), clearColor);
 		context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 		context->RSSetViewports(1, &viewport);
 		context->OMSetRenderTargets(1, rtv.GetAddressOf(), dsv.Get());
 
-		ID3D11Buffer *constant_buffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
-		context->VSSetConstantBuffers(0, 2, constant_buffers);
-		context->PSSetConstantBuffers(0, 2, constant_buffers);
+		ID3D11Buffer *constantBuffers[] = { perObjectBuffer.Get(), perFrameBuffer.Get() };
+		context->VSSetConstantBuffers(0, 2, constantBuffers);
+		context->PSSetConstantBuffers(0, 2, constantBuffers);
 
 		floor->Render(context.Get(), perObjectBuffer.Get());
 
