@@ -30,10 +30,7 @@ bool App::Init(HWND hWnd)
 		nullptr, 
 		&context
 	);
-	if (FAILED(hr)) {
-		std::cout << "D3D11CreateDevice() failed." << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "D3D11CreateDevice() failed.");
 
 	// swap chain
 	UINT msaaQuality = 0;
@@ -69,10 +66,8 @@ bool App::Init(HWND hWnd)
 	dxgiAdapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
 
 	hr = dxgiFactory->CreateSwapChain(device.Get(), &swapChainDesc, &swapChain);
-	if (FAILED(hr)) {
-		std::cout << "CreateSwapChain() failed." << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "CreateSwapChain() failed.");
+
 
 	// viewport
 	viewport.Width = (float)width;
@@ -85,16 +80,11 @@ bool App::Init(HWND hWnd)
 	// render target view
 	ComPtr<ID3D11Texture2D> backBuffer;
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&backBuffer));
-	if (FAILED(hr)) {
-		std::cout << "GetBuffer() failed." << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "GetBuffer() failed.");
+
 
 	hr = device->CreateRenderTargetView(backBuffer.Get(), nullptr, &rtv);
-	if (FAILED(hr)) {
-		std::cout << "CreateRenderTargetView() failed." << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "CreateRenderTargetView() failed.");
 
 	// depth stencil view
 	ComPtr<ID3D11Texture2D> depthBuffer;

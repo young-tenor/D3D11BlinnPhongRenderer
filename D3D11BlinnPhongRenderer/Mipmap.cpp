@@ -17,10 +17,7 @@
 		constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 		HRESULT hr = device->CreateBuffer(&constBufferDesc, nullptr, &perObjectBuffer);
-		if (FAILED(hr)) {
-			std::cout << "CreateBuffer() failed: constant buffer per object" << std::endl;
-			return false;
-		}
+		assert(SUCCEEDED(hr), "CreateBuffer() failed: constant buffer per object");
 
 		constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 		constBufferDesc.ByteWidth = sizeof(PerFrame);
@@ -28,10 +25,7 @@
 		constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 		hr = device->CreateBuffer(&constBufferDesc, nullptr, &perFrameBuffer);
-		if (FAILED(hr)) {
-			std::cout << "CreateBuffer() failed: constant buffer per frame" << std::endl;
-			return false;
-		}
+		assert(SUCCEEDED(hr), "CreateBuffer() failed: constant buffer per frame");
 
 		camera = std::make_unique<Camera>(hWnd);
 
@@ -55,10 +49,6 @@
 		auto material = std::make_shared<Material>(device.Get(), nullptr, shader, checker, width, height);
 
 		floor = std::make_unique<Object>(mesh, material);
-
-		//floor->SetScale(glm::vec3(100.0f, 100.0f, 1.0f));
-		//floor->SetRotation(glm::vec3(80.0f, 0.0f, 0.0f));
-		//floor->SetTranslation(glm::vec3(0.0f, -5.0f, 0.0f));
 
 		return true;
 	}

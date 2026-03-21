@@ -46,7 +46,8 @@ Material::Material(
 	std::shared_ptr<Data> data,
 	std::shared_ptr<Shader> shader,
 	const std::vector<UINT> &image,
-	const UINT width, const UINT height
+	const UINT width,
+	const UINT height
 ) 
 	: Material(device, data, shader) 
 {

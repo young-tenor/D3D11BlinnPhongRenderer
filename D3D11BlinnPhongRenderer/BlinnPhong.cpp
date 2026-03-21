@@ -18,10 +18,7 @@ bool BlinnPhong::Init(HWND hWnd)
 	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	HRESULT hr = device->CreateBuffer(&constBufferDesc, nullptr, &perObjectBuffer);
-	if (FAILED(hr)) {
-		std::cout << "CreateBuffer() failed: constant buffer per object" << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "CreateBuffer() failed: constant buffer per object");
 
 	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	constBufferDesc.ByteWidth = sizeof(PerFrame);
@@ -29,10 +26,7 @@ bool BlinnPhong::Init(HWND hWnd)
 	constBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
     hr = device->CreateBuffer(&constBufferDesc, nullptr, &perFrameBuffer);
-	if (FAILED(hr)) {
-		std::cout << "CreateBuffer() failed: constant buffer per frame" << std::endl;
-		return false;
-	}
+	assert(SUCCEEDED(hr), "CreateBuffer() failed: constant buffer per frame");
 
 	camera = std::make_unique<Camera>(hWnd);
 
