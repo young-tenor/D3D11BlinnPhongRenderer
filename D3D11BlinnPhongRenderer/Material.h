@@ -39,8 +39,8 @@ private:
 	void CreateSamplerState(ID3D11Device *device);
 
 private:
-	const std::shared_ptr<Data> data;
-	const std::shared_ptr<Shader> shader;
+	std::shared_ptr<Data> data;
+	std::shared_ptr<Shader> shader;
 	ComPtr<ID3D11ShaderResourceView> srv;
 	ComPtr<ID3D11SamplerState> samplerState;
 };

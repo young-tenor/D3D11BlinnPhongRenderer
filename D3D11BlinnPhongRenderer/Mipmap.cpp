@@ -39,12 +39,6 @@
 
 		auto shader = std::make_shared<Shader>(device.Get(), L"MipmapVS.hlsl", L"", L"", L"", L"MipmapPS.hlsl");
 
-		auto materialData = std::make_shared<Material::Data>();
-		materialData->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
-		materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
-		materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
-		materialData->shininess = 32.0f;
-
 		const UINT width = 1024;
 		const UINT height = 1024;
 		const UINT cellSize = 32;
@@ -57,7 +51,7 @@
 			}
 		}
 
-		auto material = std::make_shared<Material>(device.Get(), materialData, shader, checker, width, height);
+		auto material = std::make_shared<Material>(device.Get(), nullptr, shader, checker, width, height);
 
 		floor = std::make_unique<Object>(mesh, material);
 
