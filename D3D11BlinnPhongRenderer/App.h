@@ -3,7 +3,8 @@
 
 using Microsoft::WRL::ComPtr;
 
-class App {
+class App
+{
 public:
 	virtual ~App() = default;
 

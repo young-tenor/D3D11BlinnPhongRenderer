@@ -16,7 +16,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-int main() {
+int main() 
+{
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	MyRegisterClass(hInstance);
 
@@ -50,7 +51,8 @@ int main() {
 	return (int)msg.wParam;
 }
 
-ATOM MyRegisterClass(HINSTANCE hInstance) {
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
 	WNDCLASSEXW wcex = { };
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -63,7 +65,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 	return RegisterClassExW(&wcex);
 }
 
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
 	hInst = hInstance;
 
 	RECT rc = { 0, 0, 1280, 720 };
@@ -81,7 +84,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 		nullptr,
 		nullptr,
 		hInstance,
-		nullptr);
+		nullptr
+	);
 
 	if (!hWnd)
 		return FALSE;
@@ -92,7 +96,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow) {
 	return TRUE;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam)) {
 		return true;
 	}

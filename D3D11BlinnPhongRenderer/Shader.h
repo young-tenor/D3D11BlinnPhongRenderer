@@ -11,7 +11,8 @@ public:
 		const std::wstring &hsPath,
 		const std::wstring &dsPath,
 		const std::wstring &gsPath, 
-		const std::wstring &psPath);
+		const std::wstring &psPath
+	);
 	
 	void Bind(ID3D11DeviceContext *context) const;
 

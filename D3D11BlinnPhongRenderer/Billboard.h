@@ -9,7 +9,8 @@
 using Microsoft::WRL::ComPtr;
 
 
-class Billboard : public App {
+class Billboard : public App
+{
 public:
 	~Billboard() override = default;
 

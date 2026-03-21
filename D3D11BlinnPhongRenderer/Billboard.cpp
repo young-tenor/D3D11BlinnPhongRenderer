@@ -6,7 +6,8 @@
 #include "Mesh.h"
 #include "MeshGenerator.h"
 
-bool Billboard::Init(HWND hWnd) {
+bool Billboard::Init(HWND hWnd) 
+{
 	if (!App::Init(hWnd)) {
 		return false;
 	}
@@ -78,7 +79,8 @@ bool Billboard::Init(HWND hWnd) {
 	return true;
 }
 
-void Billboard::Update() {
+void Billboard::Update()
+{
 	// GUI
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -107,7 +109,8 @@ void Billboard::Update() {
 	context->Unmap(perFrameBuffer.Get(), 0);
 }
 
-void Billboard::Render() {
+void Billboard::Render() 
+{
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), clear_color);

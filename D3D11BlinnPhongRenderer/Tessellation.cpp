@@ -6,7 +6,8 @@
 #include "Mesh.h"
 #include "MeshGenerator.h"
 
-bool Tessellation::Init(HWND hWnd) {
+bool Tessellation::Init(HWND hWnd) 
+{
 	if (!App::Init(hWnd)) {
 		return false;
 	}
@@ -61,7 +62,8 @@ bool Tessellation::Init(HWND hWnd) {
 	return true;
 }
 
-void Tessellation::Update() {
+void Tessellation::Update() 
+{
 	static auto rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 
 	// GUI
@@ -97,7 +99,8 @@ void Tessellation::Update() {
 	context->Unmap(perFrameBuffer.Get(), 0);
 }
 
-void Tessellation::Render() {
+void Tessellation::Render()
+{
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), clear_color);

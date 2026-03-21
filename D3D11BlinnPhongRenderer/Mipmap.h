@@ -3,7 +3,8 @@
 #include "Camera.h"
 #include "Object.h"
 
-class Mipmap : public App {
+class Mipmap : public App
+{
 public:
 	~Mipmap() override = default;
 

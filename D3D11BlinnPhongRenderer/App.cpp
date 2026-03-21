@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "App.h"
 
-bool App::Init(HWND hWnd) {
+bool App::Init(HWND hWnd) 
+{
 	this->hWnd = hWnd;
 
 	RECT rc;
@@ -27,7 +28,8 @@ bool App::Init(HWND hWnd) {
 		D3D11_SDK_VERSION, 
 		&device,
 		nullptr, 
-		&context);
+		&context
+	);
 	if (FAILED(hr)) {
 		std::cout << "D3D11CreateDevice() failed." << std::endl;
 		return false;

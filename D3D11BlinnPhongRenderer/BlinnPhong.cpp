@@ -4,7 +4,8 @@
 #include "Shader.h"
 #include "Constants.h"
 
-bool BlinnPhong::Init(HWND hWnd) {
+bool BlinnPhong::Init(HWND hWnd)
+{
 	if (!App::Init(hWnd)) {
 		return false;
 	}
@@ -54,7 +55,8 @@ bool BlinnPhong::Init(HWND hWnd) {
 	return true;
 }
 
-void BlinnPhong::Update() {
+void BlinnPhong::Update()
+{
 	static auto rotation = glm::vec3(45.0f, 0.0f, 0.0f);
 
 	// GUI
@@ -146,7 +148,8 @@ void BlinnPhong::Update() {
 	context->Unmap(perFrameBuffer.Get(), 0);
 }
 
-void BlinnPhong::Render() {
+void BlinnPhong::Render() 
+{
 	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), clear_color);

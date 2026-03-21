@@ -5,10 +5,15 @@
 
 using Microsoft::WRL::ComPtr;
 
-class Mesh {
+class Mesh 
+{
 public:
-public:
-	Mesh(ID3D11Device *device, const std::vector<Vertex> &vertices, const std::vector<UINT> &indices, D3D11_PRIMITIVE_TOPOLOGY topology);
+	Mesh(
+		ID3D11Device *device,
+		const std::vector<Vertex> &vertices, 
+		const std::vector<UINT> &indices, 
+		D3D11_PRIMITIVE_TOPOLOGY topology
+	);
 
 	const UINT GetIndexCount() const { return indices.size(); }
 

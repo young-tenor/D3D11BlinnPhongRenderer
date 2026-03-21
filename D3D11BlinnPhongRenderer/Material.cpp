@@ -8,8 +8,10 @@ Material::Material(
 	ID3D11Device *device,
 	std::shared_ptr<Data> data,
 	std::shared_ptr<Shader> shader,
-	const std::string &texturePath) 
-	: shader(std::move(shader)) {
+	const std::string &texturePath
+) 
+	: shader(std::move(shader)) 
+{
 	if (data == nullptr) {
 		this->data = std::make_shared<Data>();
 
@@ -34,7 +36,9 @@ Material::Material(
 	std::shared_ptr<Shader> shader,
 	const std::vector<UINT> &image,
 	const UINT width, const UINT height) :
-	Material(device, data, shader, "") {
+	Material(device, data, shader, ""
+	) 
+{
 	D3D11_TEXTURE2D_DESC textureDesc = { };
 	textureDesc.Width = (UINT)width;
 	textureDesc.Height = (UINT)height;
@@ -58,7 +62,8 @@ Material::Material(
 	assert(SUCCEEDED(hr), "CreateShaderResourceView() failed.");
 }
 
-void Material::Bind(ID3D11DeviceContext *context) const {
+void Material::Bind(ID3D11DeviceContext *context) const
+{
 	if (shader) {
 		shader->Bind(context);
 	}
@@ -70,7 +75,8 @@ void Material::Bind(ID3D11DeviceContext *context) const {
 	}
 }
 
-void Material::CreateTexture(ID3D11Device *device, const std::string &fileName) {
+void Material::CreateTexture(ID3D11Device *device, const std::string &fileName)
+{
 	int width, height, channels;
 	unsigned char *imageData = stbi_load(fileName.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 	assert(imageData, "stbi_load() failed.");
@@ -99,7 +105,8 @@ void Material::CreateTexture(ID3D11Device *device, const std::string &fileName) 
 	assert(SUCCEEDED(hr), "CreateShaderResourceView() failed.");
 }
 
-void Material::CreateSamplerState(ID3D11Device *device) {
+void Material::CreateSamplerState(ID3D11Device *device)
+{
 	D3D11_SAMPLER_DESC samplerDesc = { };
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;

@@ -1,7 +1,8 @@
 #include "pch.h"
 #include "MeshGenerator.h"
 
-std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GeneratePoint() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GeneratePoint()
+{
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -13,7 +14,8 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST };
 }
 
-std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSquare() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSquare()
+{
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -44,7 +46,8 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 }
 
-std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCube() {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCube()
+{
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -161,7 +164,8 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
 }
 
 // https://www.songho.ca/opengl/gl_sphere.html
-std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSphere(const float radius, const int sectorCount, const int stackCount) {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateSphere(const float radius, const int sectorCount, const int stackCount) 
+{
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -213,7 +217,8 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST };
 }
 
-std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCubeSphere(const float radius, const int subdivision) {
+std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> MeshGenerator::GenerateCubeSphere(const float radius, const int subdivision)
+{
     std::vector<Vertex> vertices;
     std::vector<UINT> indices;
 
@@ -261,5 +266,4 @@ std::tuple<std::vector<Vertex>, std::vector<UINT>, D3D11_PRIMITIVE_TOPOLOGY> Mes
     }
 
     return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST };
-    //return { vertices, indices, D3D11_PRIMITIVE_TOPOLOGY_POINTLIST };
 }

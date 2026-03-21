@@ -7,7 +7,9 @@ Shader::Shader(
 	const std::wstring &hsPath,
 	const std::wstring &dsPath,
 	const std::wstring &gsPath, 
-	const std::wstring &psPath) {
+	const std::wstring &psPath
+) 
+{
 	CreateVertexShaderAndInputLayout(device, vsPath);
 	if (!hsPath.empty()) {
 		CreateHullShader(device, hsPath);
@@ -21,7 +23,8 @@ Shader::Shader(
 	CreatePixelShader(device, psPath);
 }
 
-void Shader::Bind(ID3D11DeviceContext *context) const {
+void Shader::Bind(ID3D11DeviceContext *context) const
+{
 	context->IASetInputLayout(inputLayout.Get());
 	context->VSSetShader(vs.Get(), nullptr, 0);
 	context->HSSetShader(hs.Get(), nullptr, 0);
@@ -30,7 +33,8 @@ void Shader::Bind(ID3D11DeviceContext *context) const {
 	context->PSSetShader(ps.Get(), nullptr, 0);
 }
 
-void Shader::CreateVertexShaderAndInputLayout(ID3D11Device *device, const std::wstring &vsPath) {
+void Shader::CreateVertexShaderAndInputLayout(ID3D11Device *device, const std::wstring &vsPath) 
+{
 	ID3DBlob *blob = nullptr;
 	HRESULT	hr = D3DCompileFromFile(vsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "vs_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: vertex shader");
@@ -46,7 +50,8 @@ void Shader::CreateVertexShaderAndInputLayout(ID3D11Device *device, const std::w
 	assert(SUCCEEDED(hr), "CreateInputLayout() failed.");
 }
 
-void Shader::CreateHullShader(ID3D11Device *device, const std::wstring &hsPath) {
+void Shader::CreateHullShader(ID3D11Device *device, const std::wstring &hsPath) 
+{
 	ID3DBlob *blob = nullptr;
 	HRESULT hr = D3DCompileFromFile(hsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "hs_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: hull shader");
@@ -54,7 +59,8 @@ void Shader::CreateHullShader(ID3D11Device *device, const std::wstring &hsPath) 
 	blob->Release();
 }
 
-void Shader::CreateDomainShader(ID3D11Device *device, const std::wstring &dsPath) {
+void Shader::CreateDomainShader(ID3D11Device *device, const std::wstring &dsPath) 
+{
 	ID3DBlob *blob = nullptr;
 	HRESULT hr = D3DCompileFromFile(dsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "ds_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: domain shader");
@@ -62,7 +68,8 @@ void Shader::CreateDomainShader(ID3D11Device *device, const std::wstring &dsPath
 	blob->Release();
 }
 
-void Shader::CreateGeometryShader(ID3D11Device *device, const std::wstring &gsPath) {
+void Shader::CreateGeometryShader(ID3D11Device *device, const std::wstring &gsPath) 
+{
 	ID3DBlob *blob = nullptr;
 	HRESULT hr = D3DCompileFromFile(gsPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "gs_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: geometry shader");
@@ -70,7 +77,8 @@ void Shader::CreateGeometryShader(ID3D11Device *device, const std::wstring &gsPa
 	blob->Release();
 }
 
-void Shader::CreatePixelShader(ID3D11Device *device, const std::wstring &psPath) {
+void Shader::CreatePixelShader(ID3D11Device *device, const std::wstring &psPath)
+{
 	ID3DBlob *blob = nullptr;
 	HRESULT hr = D3DCompileFromFile(psPath.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "main", "ps_5_0", 0, 0, &blob, nullptr);
 	assert(SUCCEEDED(hr), "D3DCompileFromFile() failed: pixel shader");

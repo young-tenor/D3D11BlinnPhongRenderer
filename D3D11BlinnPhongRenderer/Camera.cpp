@@ -1,25 +1,29 @@
 #include "pch.h"
 #include "Camera.h"
 
-Camera::Camera(HWND hWnd) : hWnd(hWnd) {
+Camera::Camera(HWND hWnd) : hWnd(hWnd)
+{
     RECT rc;
     GetClientRect(hWnd, &rc);
     width = rc.right - rc.left;
     height = rc.bottom - rc.top;
 }
 
-void Camera::Update() {
+void Camera::Update()
+{
     UpdateDistance();
     UpdatePosition();
 }
 
-void Camera::UpdateDistance() {
+void Camera::UpdateDistance()
+{
     float wheel = ImGui::GetIO().MouseWheel;
     dist -= wheel;
     dist = std::clamp(dist, 3.0f, 10.0f);
 }
 
-void Camera::UpdatePosition() {
+void Camera::UpdatePosition()
+{
     POINT curPos;
     GetCursorPos(&curPos);
     ScreenToClient(hWnd, &curPos);

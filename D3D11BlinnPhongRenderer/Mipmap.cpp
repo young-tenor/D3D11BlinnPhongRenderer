@@ -3,7 +3,8 @@
 	#include "Constants.h"
 	#include "MeshGenerator.h"
 
-	bool Mipmap::Init(HWND hWnd) {
+	bool Mipmap::Init(HWND hWnd)
+	{
 		if (!App::Init(hWnd)) {
 			return false;
 		}
@@ -62,7 +63,8 @@
 		return true;
 	}
 
-	void Mipmap::Update() {
+	void Mipmap::Update()
+	{
 		// GUI
 		ImGui_ImplDX11_NewFrame();
 		ImGui_ImplWin32_NewFrame();
@@ -89,7 +91,8 @@
 		context->Unmap(perFrameBuffer.Get(), 0);
 	}
 
-	void Mipmap::Render() {
+	void Mipmap::Render()
+	{
 		const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
 		//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 		context->ClearRenderTargetView(rtv.Get(), clear_color);

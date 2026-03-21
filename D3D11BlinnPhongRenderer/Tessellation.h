@@ -6,7 +6,8 @@
 #include "Light.h"
 #include "Object.h"
 
-class Tessellation : public App {
+class Tessellation : public App 
+{
 public:
 	~Tessellation() override = default;
 

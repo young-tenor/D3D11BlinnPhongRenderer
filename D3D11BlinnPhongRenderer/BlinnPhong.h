@@ -9,7 +9,8 @@
 
 using Microsoft::WRL::ComPtr;
 
-class BlinnPhong : public App {
+class BlinnPhong : public App
+{
 public:
 	~BlinnPhong() override = default;
 
