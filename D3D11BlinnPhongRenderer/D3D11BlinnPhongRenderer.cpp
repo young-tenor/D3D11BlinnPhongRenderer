@@ -7,8 +7,8 @@
 
 HINSTANCE hInst;
 HWND hWnd;
-const wchar_t szTitle[] = L"D3D11 CPU Ray Tracer";
-const wchar_t szWindowClass[] = L"D3D11CPURayTracer";
+const wchar_t szTitle[] = L"D3D11 Blinn-Phong Renderer";
+const wchar_t szWindowClass[] = L"D3D11BlinnPhongRenderer";
 
 ATOM MyRegisterClass(HINSTANCE hInstance);
 BOOL InitInstance(HINSTANCE, int);
