@@ -55,7 +55,7 @@ bool Tessellation::Init(HWND hWnd)
 	materialData->diffuse = glm::vec3(0.7f, 0.7f, 0.7f);
 	materialData->specular = glm::vec3(0.5f, 0.5f, 0.5f);
 	materialData->shininess = 32.0f;
-	auto material = std::make_shared<Material>(device.Get(), materialData, shader, "");
+	auto material = std::make_shared<Material>(device.Get(), materialData, shader);
 
 	object = std::make_unique<Object>(mesh, material);
 

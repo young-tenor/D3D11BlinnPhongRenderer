@@ -4,13 +4,27 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
+Material::Material(ID3D11Device *device, std::shared_ptr<Data> data, std::shared_ptr<Shader> shader) : shader(std::move(shader))
+{
+	if (data == nullptr) {
+		this->data = std::make_shared<Data>();
+
+		this->data->ambient = glm::vec3(0.1f);
+		this->data->diffuse = glm::vec3(0.7f);
+		this->data->specular = glm::vec3(0.5f);
+		this->data->shininess = 32.0f;
+	} else {
+		this->data = std::move(data);
+	}
+}
+
 Material::Material(
 	ID3D11Device *device,
 	std::shared_ptr<Data> data,
 	std::shared_ptr<Shader> shader,
 	const std::string &texturePath
 ) 
-	: shader(std::move(shader)) 
+	: Material(device, data, shader)
 {
 	if (data == nullptr) {
 		this->data = std::make_shared<Data>();
@@ -23,10 +37,7 @@ Material::Material(
 		this->data = std::move(data);
 	}
 
-	if (!texturePath.empty()) {
-		CreateTexture(device, texturePath);
-	}
-
+	CreateTexture(device, texturePath);
 	CreateSamplerState(device);
 }
 
@@ -35,9 +46,9 @@ Material::Material(
 	std::shared_ptr<Data> data,
 	std::shared_ptr<Shader> shader,
 	const std::vector<UINT> &image,
-	const UINT width, const UINT height) :
-	Material(device, data, shader, ""
-	) 
+	const UINT width, const UINT height
+) 
+	: Material(device, data, shader) 
 {
 	D3D11_TEXTURE2D_DESC textureDesc = { };
 	textureDesc.Width = (UINT)width;

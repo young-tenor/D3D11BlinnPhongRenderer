@@ -19,6 +19,11 @@ public:
 
 public:
 	Material(
+		ID3D11Device *device,
+		std::shared_ptr<Data> data,
+		std::shared_ptr<Shader> shader
+	);
+	Material(
 		ID3D11Device *device, 
 		std::shared_ptr<Data> data, 
 		std::shared_ptr<Shader> shader, 
