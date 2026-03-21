@@ -17,5 +17,10 @@ Texture2D g_texture : register(t0);
 SamplerState g_sampler : register(s0);
 
 float4 main(VSOutput input) : SV_TARGET {
-    return g_texture.Sample(g_sampler, input.texcoord);
+    if (useMipmap) {
+        return g_texture.Sample(g_sampler, input.texcoord * 100.0f);
+    } else {
+        return g_texture.SampleLevel(g_sampler, input.texcoord * 100.0f, 0);
+
+    }
 }

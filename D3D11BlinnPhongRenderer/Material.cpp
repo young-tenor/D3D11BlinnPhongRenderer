@@ -54,24 +54,31 @@ Material::Material(
 	D3D11_TEXTURE2D_DESC textureDesc = { };
 	textureDesc.Width = (UINT)width;
 	textureDesc.Height = (UINT)height;
-	textureDesc.MipLevels = 1;
+	textureDesc.MipLevels = 0;
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
-	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-
-	D3D11_SUBRESOURCE_DATA initialData = { };
-	initialData.pSysMem = image.data();
-	initialData.SysMemPitch = width * sizeof(UINT);
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+	textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 
 	ID3D11Texture2D *texture2D = nullptr;
-	HRESULT hr = device->CreateTexture2D(&textureDesc, &initialData, &texture2D);
-	assert(SUCCEEDED(hr), "CreateTexture2D() failed.");
+	HRESULT hr = device->CreateTexture2D(&textureDesc, nullptr, &texture2D);
+	assert(SUCCEEDED(hr) && "CreateTexture2D() failed.");
+
+	ComPtr<ID3D11DeviceContext> context;
+	device->GetImmediateContext(&context);
+
+	context->UpdateSubresource(texture2D, 0, nullptr, image.data(), width * sizeof(UINT), 0);
 
 	hr = device->CreateShaderResourceView(texture2D, nullptr, &srv);
+	assert(SUCCEEDED(hr) && "CreateShaderResourceView() failed.");
+
+	context->GenerateMips(srv.Get());
+
 	texture2D->Release();
-	assert(SUCCEEDED(hr), "CreateShaderResourceView() failed.");
+
+	CreateSamplerState(device);
 }
 
 void Material::Bind(ID3D11DeviceContext *context) const

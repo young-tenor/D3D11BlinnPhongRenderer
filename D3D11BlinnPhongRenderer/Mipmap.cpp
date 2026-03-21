@@ -50,6 +50,10 @@
 
 		floor = std::make_unique<Object>(mesh, material);
 
+		floor->SetScale(glm::vec3(100.0f, 100.0f, 100.0f));
+		floor->SetRotation(glm::vec3(90.0f, 0.0f, 0.0f));
+		floor->SetTranslation(glm::vec3(0.0f, -1.0f, 0.0f));
+
 		return true;
 	}
 
