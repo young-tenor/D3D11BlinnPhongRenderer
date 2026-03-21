@@ -144,8 +144,8 @@ void BlinnPhong::Update()
 
 void BlinnPhong::Render() 
 {
-	const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
-	//const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	//const float clear_color[] = { 0.1f, 0.2f, 0.4f, 1.0f };
+	const float clear_color[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	context->ClearRenderTargetView(rtv.Get(), clear_color);
 	context->ClearDepthStencilView(dsv.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
