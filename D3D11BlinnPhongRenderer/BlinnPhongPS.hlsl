@@ -17,13 +17,15 @@ struct VSOutput {
 Texture2D g_texture : register(t0);
 SamplerState g_sampler : register(s0);
 
-float3 DirectionalLight(float3 normal, float3 toEye) {
+float3 DirectionalLight(float3 normal, float3 toEye)
+{
     float3 lightVec = -light.dir;
     float3 lightStrength = light.strength * max(dot(lightVec, normal), 0.0f);
     return BlinnPhong(normal, lightVec, lightStrength, toEye);
 }
 
-float3 PointLight(float3 normal, float3 pos, float3 toEye) {
+float3 PointLight(float3 normal, float3 pos, float3 toEye)
+{
     float3 lightVec = light.pos - pos;
     
     float dist = length(lightVec);
@@ -41,7 +43,8 @@ float3 PointLight(float3 normal, float3 pos, float3 toEye) {
     }
 }
 
-float3 SpotLight(float3 normal, float3 pos, float3 toEye) {
+float3 SpotLight(float3 normal, float3 pos, float3 toEye)
+{
     float3 lightVec = light.pos - pos;
     
     float dist = length(lightVec);
@@ -63,7 +66,8 @@ float3 SpotLight(float3 normal, float3 pos, float3 toEye) {
     }
 }
 
-float4 main(VSOutput input) : SV_TARGET {
+float4 main(VSOutput input) : SV_TARGET
+{
     float3 toEye = normalize(eyePos - input.posWorld);
     
     float3 color = material.ambient;

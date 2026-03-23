@@ -8,7 +8,8 @@ struct VSOutput {
     float4 pos : POSITION;
 };
 
-VSOutput main(VSInput input) {
+VSOutput main(VSInput input)
+{
     VSOutput output;
     output.pos = float4(input.pos, 1.0f);
     return output;

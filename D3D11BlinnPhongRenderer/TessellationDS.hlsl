@@ -23,7 +23,8 @@ struct DSOutput {
 };
 
 [domain("quad")]
-DSOutput main(HSConstOutput input, float2 uv : SV_DomainLocation, const OutputPatch<HSOutput, 4> patch) {
+DSOutput main(HSConstOutput input, float2 uv : SV_DomainLocation, const OutputPatch<HSOutput, 4> patch)
+{
     DSOutput output;
     
     float3 v1 = lerp(patch[0].pos, patch[1].pos, uv.x);

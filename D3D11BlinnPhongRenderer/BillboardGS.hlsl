@@ -17,7 +17,8 @@ struct GSOutput {
 };
 
 [maxvertexcount(4)]
-void main(point VSOutput input[1], inout TriangleStream<GSOutput> outStream) {
+void main(point VSOutput input[1], inout TriangleStream<GSOutput> outStream)
+{
     float size = 0.5f;
     
     float4 look = float4(eyePos, 1.0f) - input[0].pos;

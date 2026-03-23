@@ -9,7 +9,8 @@ struct VSOutput {
     float3 normal : NORMAL;
 };
 
-VSOutput main(VSInput input) {
+VSOutput main(VSInput input)
+{
     VSOutput output;
     output.pos = input.pos;
     output.normal = input.normal;

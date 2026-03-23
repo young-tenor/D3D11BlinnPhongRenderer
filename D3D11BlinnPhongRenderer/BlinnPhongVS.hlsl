@@ -20,7 +20,8 @@ struct VSOutput {
     float2 texcoord : TEXCOORD;
 };
 
-VSOutput main(VSInput input) {
+VSOutput main(VSInput input)
+{
     VSOutput output;
     
     output.posWorld = mul(float4(input.pos, 1.0f), model);

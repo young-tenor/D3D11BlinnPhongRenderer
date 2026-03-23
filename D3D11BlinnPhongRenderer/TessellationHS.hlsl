@@ -21,7 +21,8 @@ struct HSConstOutput {
     float inside[2] : SV_InsideTessFactor;
 };
 
-HSConstOutput PatchConstFunc(InputPatch<VSOutput, 4> patch, uint patchId : SV_PrimitiveID) {
+HSConstOutput PatchConstFunc(InputPatch<VSOutput, 4> patch, uint patchId : SV_PrimitiveID)
+{
     HSConstOutput output;
 
     float3 n0 = normalize(patch[0].pos);
@@ -57,7 +58,8 @@ HSConstOutput PatchConstFunc(InputPatch<VSOutput, 4> patch, uint patchId : SV_Pr
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(4)]
 [patchconstantfunc("PatchConstFunc")]
-HSOutput main(InputPatch<VSOutput, 4> patch, uint i : SV_OutputControlPointID) {
+HSOutput main(InputPatch<VSOutput, 4> patch, uint i : SV_OutputControlPointID)
+{
     HSOutput output;
     output.pos = patch[i].pos;
     return output;
