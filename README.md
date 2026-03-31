@@ -11,7 +11,7 @@ std::unique_ptr<App> app;
 //app = std::make_unique<Tessellation>();
 app = std::make_unique <Mipmap>();
 ```
-### 목차
+## Index
 * [Blinn-Phong](#blinn-phong)
 * [Billboard](#billboard)
 * [Tessellation](#tessellation)
